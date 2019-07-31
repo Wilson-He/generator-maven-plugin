@@ -1,0 +1,30 @@
+配置Demo  
+   
+      <build>
+          <plugins>
+              <plugin>
+                  <groupId>io.github.wilson-he</groupId>
+                  <artifactId>generator-maven-plugin</artifactId>
+                  <version>0.0.1</version>
+                  <configuration>
+                      <basePackage>io.github.test</basePackage>
+                      <dataSource>
+                          <url><![CDATA[jdbc:mysql://localhost:3306/wilson?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false]]></url>
+                          <username>root</username>
+                          <password>tiger</password>
+                          <driverClass>MYSQL</driverClass>
+                      </dataSource>
+                      <templates>
+                          <entity>/templates/custom-entity.java.ftl</entity>
+                      </templates>
+                  </configuration>
+                  <executions>
+                      <execution>
+                          <goals>
+                              <goal>generate</goal>
+                          </goals>
+                      </execution>
+                  </executions>
+              </plugin>
+          </plugins>
+      </build>

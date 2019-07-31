@@ -1,0 +1,75 @@
+/*
+ * Copyright (c) 2011-2020, baomidou (jobob@qq.com).
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * <p>
+ * https://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package com.baomidou.mybatisplus.generator.engine;
+
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.baomidou.mybatisplus.generator.config.ConstVal;
+import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import lombok.Data;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Freemarker 模板引擎实现文件输出
+ *
+ * @author nieqiurong
+ * @since 2018-01-11
+ */
+@Data
+public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
+
+    private Configuration configuration;
+    private Configuration customConfiguration;
+    private List<String> customTemplates = Collections.emptyList();
+
+    @Override
+    public FreemarkerTemplateEngine init(ConfigBuilder configBuilder) throws IOException {
+        super.init(configBuilder);
+        configuration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
+        configuration.setDefaultEncoding(ConstVal.UTF8);
+        configuration.setClassForTemplateLoading(FreemarkerTemplateEngine.class, StringPool.SLASH);
+        if (getResourcesDir() != null) {
+            customConfiguration = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
+            customConfiguration.setDefaultEncoding(ConstVal.UTF8);
+            customConfiguration.setDirectoryForTemplateLoading(getResourcesDir());
+        }
+        return this;
+    }
+
+
+    @Override
+    public void writer(Map<String, Object> objectMap, String templatePath, String outputFile) throws Exception {
+        Template template = customTemplates.contains(templatePath) ? customConfiguration.getTemplate(templatePath)
+                : configuration.getTemplate(templatePath);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile)) {
+            template.process(objectMap, new OutputStreamWriter(fileOutputStream, ConstVal.UTF8));
+        }
+        logger.debug("模板:{};  文件:{}", templatePath, outputFile);
+    }
+
+
+    @Override
+    public String templateFilePath(String filePath) {
+        return filePath + ".ftl";
+    }
+}
