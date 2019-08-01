@@ -216,7 +216,7 @@ public class TableField {
                     list.add(str.substring(start, end));
                 }
 
-                return list.isEmpty() ? null : (String[]) list.toArray(new String[list.size()]);
+                return list.isEmpty() ? null : list.toArray(new String[list.size()]);
             }
         } else {
             return null;

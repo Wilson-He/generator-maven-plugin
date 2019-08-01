@@ -20,10 +20,12 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -34,6 +36,7 @@ import java.util.stream.IntStream;
  * @since 2016/8/30
  */
 @Data
+@ToString(exclude = "hasEnums")
 @Accessors(chain = true)
 public class TableInfo {
 
@@ -144,7 +147,7 @@ public class TableInfo {
      * @return fieldNames
      */
     public String getFieldNames() {
-        if (StringUtils.isEmpty(fieldNames)) {
+        if (StringUtils.isEmpty(fieldNames) && fields != null) {
             StringBuilder names = new StringBuilder();
             IntStream.range(0, fields.size()).forEach(i -> {
                 TableField fd = fields.get(i);
@@ -160,7 +163,8 @@ public class TableInfo {
     }
 
     public boolean isHasEnums() {
-        this.hasEnums = fields.stream().anyMatch(TableField::isConstantField);
+        this.hasEnums = Optional.ofNullable(fields).map(e -> e.stream().anyMatch(TableField::isConstantField))
+                .orElse(false);
         return hasEnums;
     }
 }

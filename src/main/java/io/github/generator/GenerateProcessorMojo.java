@@ -3,7 +3,6 @@ package io.github.generator;
 import com.baomidou.mybatisplus.generator.DefaultGeneratorConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -39,17 +38,27 @@ public class GenerateProcessorMojo extends AbstractMojo {
     @Parameter
     private String logicDeleteFieldName;
     /**
-     * 根据关键字排除生成指定关键字的Service、Controller,
+     * 根据关键字排除生成表名含关键字的Service、Controller,
      */
     @Parameter
-    private String[] excludeKeywords;
+    private String[] upstreamExclusions;
     /**
-     * 根据关键字生成指定关键字的Service、Controller,
+     * 根据关键字生成表名含关键字的Service、Controller,
      */
     @Parameter
-    private String[] includeKeywords;
+    private String[] upstreamInclusions;
+    /**
+     * 生成含指定正则的文件
+     */
     @Parameter
-    private String tablePrefix;
+    private String[] inclusions;
+    /**
+     * 不生成含指定正则的文件
+     */
+    @Parameter
+    private String[] exclusions;
+    @Parameter
+    private String[] tablePrefix;
     private static final String RESOURCE_PATH = "/src/main/resources";
 
     @Override
@@ -62,7 +71,12 @@ public class GenerateProcessorMojo extends AbstractMojo {
                     .setOutputDir(outputDirectory.getAbsolutePath())
                     .backGenerator()
                     .getStrategy()
-                    .excludeKeywords(excludeKeywords)
+                    .setInclude(inclusions)
+                    .setExclude(exclusions)
+                    .setTablePrefix(tablePrefix)
+                    .includeKeywords(upstreamInclusions)
+                    .excludeKeywords(upstreamExclusions)
+                    .setInclude()
                     .setLogicDeleteFieldName(logicDeleteFieldName)
                     .includeKeywords()
                     .backGenerator()
@@ -75,5 +89,6 @@ public class GenerateProcessorMojo extends AbstractMojo {
         } catch (IOException e) {
             log.error("生成错误", e);
         }
+        log.info("generate finish");
     }
 }

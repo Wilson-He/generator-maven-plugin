@@ -24,8 +24,8 @@ import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableFill;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.querys.H2Query;
-import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.sql.Connection;
@@ -40,6 +40,7 @@ import java.util.*;
  * @author YangHu, tangguo, hubin
  * @since 2016-08-30
  */
+@Slf4j
 public class ConfigBuilder {
 
     /**
@@ -161,7 +162,6 @@ public class ConfigBuilder {
     public String getSuperServiceImplClass() {
         return superServiceImplClass;
     }
-
 
     public String getSuperControllerClass() {
         return superControllerClass;
@@ -398,7 +398,7 @@ public class ConfigBuilder {
                 if (isInclude) {
                     StringBuilder sb = new StringBuilder(tablesSql);
                     sb.append(" AND ").append(dbQuery.tableName()).append(" IN (");
-                    Arrays.stream(config.getInclude()).forEach(tbname -> sb.append(StringPool.SINGLE_QUOTE).append(tbname.toUpperCase()).append("',"));
+                    Arrays.stream(config.getInclude()).forEach(tbName -> sb.append(StringPool.SINGLE_QUOTE).append(tbName.toUpperCase()).append("',"));
                     sb.replace(sb.length() - 1, sb.length(), StringPool.RIGHT_BRACKET);
                     tablesSql = sb.toString();
                 } else if (isExclude) {
@@ -423,24 +423,10 @@ public class ConfigBuilder {
                         tableInfo = new TableInfo();
                         tableInfo.setName(tableName);
                         tableInfo.setComment(tableComment);
-                        if (isInclude) {
-                            for (String includeTable : config.getInclude()) {
-                                // 忽略大小写等于 或 正则 true
-                                if (tableNameMatches(includeTable, tableName)) {
-                                    includeTableList.add(tableInfo);
-                                } else {
-                                    notExistTables.add(includeTable);
-                                }
-                            }
-                        } else if (isExclude) {
-                            for (String excludeTable : config.getExclude()) {
-                                // 忽略大小写等于 或 正则 true
-                                if (tableNameMatches(excludeTable, tableName)) {
-                                    excludeTableList.add(tableInfo);
-                                } else {
-                                    notExistTables.add(excludeTable);
-                                }
-                            }
+                        if (isInclude && org.apache.commons.lang3.StringUtils.containsAny(tableName, config.getInclude())) {
+                            includeTableList.add(tableInfo);
+                        } else if (isExclude && org.apache.commons.lang3.StringUtils.containsAny(tableName, config.getExclude())) {
+                            excludeTableList.add(tableInfo);
                         }
                         tableList.add(tableInfo);
                     } else {
@@ -448,14 +434,6 @@ public class ConfigBuilder {
                     }
                 }
             }
-            // 将已经存在的表移除，获取配置中数据库不存在的表
-            for (TableInfo tabInfo : tableList) {
-                notExistTables.remove(tabInfo.getName());
-            }
-            if (notExistTables.size() > 0) {
-                System.err.println("表 " + notExistTables + " 在数据库中不存在！！！");
-            }
-
             // 需要反向生成的表信息
             if (isExclude) {
                 tableList.removeAll(excludeTableList);
@@ -571,7 +549,6 @@ public class ConfigBuilder {
                         field.setPropertyName(strategyConfig, processName(field.getName(), config.getNaming()));
                     }
                     field.setColumnType(dataSourceConfig.getTypeConvert().processTypeConvert(globalConfig, field.getType()));
-                    IColumnType columnType = dataSourceConfig.getTypeConvert().processTypeConvert(globalConfig, field.getType());
                     field.setComment(results.getString(dbQuery.fieldComment()));
                     if (strategyConfig.includeSuperEntityColumns(field.getName())) {
                         // 跳过公共字段

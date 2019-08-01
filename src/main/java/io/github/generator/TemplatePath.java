@@ -18,11 +18,18 @@ import java.util.List;
 public class TemplatePath {
     private String entity;
     private String constant;
-    private String service;
-    private String serviceImpl;
     private String dao;
     private String xml;
+    private String service;
+    private String serviceImpl;
     private String controller;
+    private Boolean excludeEntity = false;
+    private Boolean excludeConstant = false;
+    private Boolean excludeDao = false;
+    private Boolean excludeXml = false;
+    private Boolean excludeService = false;
+    private Boolean excludeServiceImpl = false;
+    private Boolean excludeController = true;
     private File resourcesPath;
 
     public List<String> templatePaths() {

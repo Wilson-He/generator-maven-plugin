@@ -2,8 +2,8 @@ package io.github.generator;
 
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import lombok.Data;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.springframework.beans.BeanUtils;
+
+import java.util.Objects;
 
 /**
  * @author Wilson
@@ -11,12 +11,16 @@ import org.springframework.beans.BeanUtils;
  **/
 @Data
 public class DataSourceProperties {
-    private DriverType driverClass;
+    private DriverType driverType;
     private String url;
     private String username;
     private String password;
 
     public DataSourceConfig toDataSourceConfig() {
-        return new DataSourceConfig(url, driverClass.getDriverClass().getCanonicalName(), username, password);
+        Objects.requireNonNull(driverType, "driverType不能为空");
+        Objects.requireNonNull(url, "url不能为空");
+        Objects.requireNonNull(username, "username不能为空");
+        Objects.requireNonNull(password, "password不能为空");
+        return new DataSourceConfig(url, driverType.getDriverClass().getCanonicalName(), username, password);
     }
 }

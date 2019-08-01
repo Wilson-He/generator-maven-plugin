@@ -40,7 +40,7 @@ public interface ${entity}Constant {
                 .put(${fieldEnum.key}, "${fieldEnum.comment}")
             </#if>
         </#list>
-        .build();
+                .build();
     </#if>
     }
 

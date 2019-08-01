@@ -21,7 +21,6 @@ import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.converts.*;
 import com.baomidou.mybatisplus.generator.config.querys.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.sql.Connection;

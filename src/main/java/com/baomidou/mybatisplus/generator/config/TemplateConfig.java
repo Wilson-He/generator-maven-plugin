@@ -20,6 +20,7 @@ import io.github.generator.TemplatePath;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
 
@@ -33,6 +34,7 @@ import java.util.function.BiFunction;
  */
 @Data
 @Accessors(chain = true)
+@ToString(exclude = "autoGenerator")
 public class TemplateConfig {
 
     @Getter(AccessLevel.NONE)
@@ -54,60 +56,6 @@ public class TemplateConfig {
 
     public AutoGenerator backGenerator() {
         return autoGenerator;
-    }
-
-    /**
-     * 不生成Entity
-     *
-     * @return TemplateConfig
-     */
-    public TemplateConfig excludeEntity() {
-        return setEntity(null);
-    }
-
-    /**
-     * 不生成Constant
-     *
-     * @return TemplateConfig
-     */
-    public TemplateConfig excludeConstant() {
-        return setConstant(null);
-    }
-
-    /**
-     * 不生成Mapper
-     *
-     * @return TemplateConfig
-     */
-    public TemplateConfig excludeMapper() {
-        return setMapper(null);
-    }
-
-    /**
-     * 不生成Xml
-     *
-     * @return TemplateConfig
-     */
-    public TemplateConfig excludeXml() {
-        return setXml(null);
-    }
-
-    /**
-     * 不生成Service
-     *
-     * @return TemplateConfig
-     */
-    public TemplateConfig excludeService() {
-        return setService(null);
-    }
-
-    /**
-     * 不生成Entity
-     *
-     * @return TemplateConfig
-     */
-    public TemplateConfig excludeServiceImpl() {
-        return setServiceImpl(null);
     }
 
     /**
@@ -143,6 +91,18 @@ public class TemplateConfig {
         computePath(templatePath.getService(), TemplateConfig::setService);
         computePath(templatePath.getServiceImpl(), TemplateConfig::setServiceImpl);
         computePath(templatePath.getController(), TemplateConfig::setController);
+        excludeIf(templatePath.getExcludeEntity(), TemplateConfig::setEntity, null);
+        excludeIf(templatePath.getExcludeConstant(), TemplateConfig::setConstant, null);
+        excludeIf(templatePath.getExcludeDao(), TemplateConfig::setMapper, null);
+        excludeIf(templatePath.getExcludeXml(), TemplateConfig::setXml, null);
+        excludeIf(templatePath.getExcludeService(), TemplateConfig::setService, null);
+        excludeIf(templatePath.getExcludeServiceImpl(), TemplateConfig::setServiceImpl, null);
+        excludeIf(templatePath.getExcludeController(), TemplateConfig::setController, null);
         return this;
     }
+
+    private <T> TemplateConfig excludeIf(boolean isExclude, BiFunction<TemplateConfig, T, TemplateConfig> setFunc, T t) {
+        return isExclude ? setFunc.apply(this, t) : this;
+    }
+
 }
