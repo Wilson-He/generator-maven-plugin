@@ -1,4 +1,4 @@
-# generator-maven-plugin(![版本更新信息](https://github.com/Wilson-He/generator-maven-plugin/blob/master/%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0%E4%BF%A1%E6%81%AF.md))
+# generator-maven-plugin([版本更新信息](https://github.com/Wilson-He/generator-maven-plugin/blob/master/%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0%E4%BF%A1%E6%81%AF.md))
 
 - ## 快速开始(mvn generator:generate)
 
