@@ -1,4 +1,4 @@
-# generator-maven-plugin
+# generator-maven-plugin(![版本更新信息](https://github.com/Wilson-He/generator-maven-plugin/blob/master/%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0%E4%BF%A1%E6%81%AF.md))
 
 - ## 快速开始(mvn generator:generate)
 
@@ -14,16 +14,6 @@
                   <password>tiger</password>
                   <driverType>MYSQL</driverType>
               </dataSource>
-              <exclusions>
-                  <param>relation</param>
-              </exclusions>
-              <upstreamExclusions>
-                  <param>detail</param>
-              </upstreamExclusions>
-              <templates>
-                  <entity>/templates/custom-entity.java.ftl</entity>
-                  <excludeServiceImpl>true</excludeServiceImpl>
-              </templates>
           </configuration>
           <executions>
               <execution>
@@ -86,3 +76,44 @@
       - propertyName: 属性名
       - name: db字段名
       - comment: 字段注释
+      
+  - ## 详细配置例子
+  
+        <plugin>
+            <groupId>io.github.wilson-he</groupId>
+            <artifactId>generator-maven-plugin</artifactId>
+            <version>0.0.2</version>
+            <configuration>
+                <basePackage>io.github.test</basePackage>
+                <dataSource>
+                    <url><![CDATA[jdbc:mysql://localhost:3306/wilson?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false]]></url>
+                    <username>root</username>
+                    <password>tiger</password>
+                    <driverType>MYSQL</driverType>
+                </dataSource>
+                <exclusions>
+                    <param>relation</param>
+                </exclusions>
+                <upstreamExclusions>
+                    <param>detail</param>
+                </upstreamExclusions>
+                <templates>
+                    <entity>/templates/custom-entity.java.ftl</entity>
+                    <excludeServiceImpl>true</excludeServiceImpl>
+                    <customs>
+                        <param>
+                            <path>/templates/manager.ftl</path>
+                            <subPackage>manager</subPackage>
+                            <layerName>Manager</layerName>
+                        </param>
+                    </customs>
+                </templates>
+            </configuration>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>generate</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
