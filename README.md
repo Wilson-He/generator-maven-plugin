@@ -54,23 +54,23 @@
   - tablePrefix: 字符串数组,表名前缀,默认空
     
 - ## ftl模板常用变量
-  - package: 包路径变量
+  - package: 包路径变量,${package.xxx}
     - Entity: entity完整包路径,如io.github.test.entity
     - Mapper
     - Service
     - ServiceImpl
     - Controller
-  - table: 表信息
+  - table: 表信息变量,${table.xxx}
     - comment: 注释
     - name: 表名
     - entityName: 当前表对应生成的entity文件名,如UserBase.java
-    - constantName: 当前表对应生成的constant文件名,如UserBase.java
+    - constantName: 当前表对应生成的constant文件名,如UserBaseConstant.java
     - mapperName: 同上
     - xmlName: 同上
     - serviceName: 同上
     - serviceImplName: 同上
     - controllerName: 同上
-    - fields: 字段列表(以下为每个字段遍历时的常用属性)
+    - fields: 字段列表,模板遍历<#list table.fields as field>,以下为field变量
       - table: 表名
       - propertyType: 属性类型
       - propertyName: 属性名
