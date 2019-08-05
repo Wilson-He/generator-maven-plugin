@@ -1,34 +1,11 @@
 # generator-maven-plugin
 
-- ## 依赖添加
-
-      <plugin>
-          <groupId>io.github.wilson-he</groupId>
-          <artifactId>generator-maven-plugin</artifactId>
-          <version>0.0.1</version>
-          <configuration>
-              <basePackage>io.github.test</basePackage>
-              <dataSource>
-                  <url>db-url</url>
-                  <username>db-username</username>
-                  <password>db-password</password>
-                  <driverType>db-driver-type</driverType>
-              </dataSource>
-          <executions>
-              <execution>
-                  <goals>
-                      <goal>generate</goal>
-                  </goals>
-              </execution>
-          </executions>
-      </plugin>
-
 - ## 快速开始(mvn generator:generate)
 
       <plugin>
           <groupId>io.github.wilson-he</groupId>
           <artifactId>generator-maven-plugin</artifactId>
-          <version>0.0.1</version>
+          <version>0.0.2</version>
           <configuration>
               <basePackage>io.github.test</basePackage>
               <dataSource>
@@ -75,6 +52,10 @@
     - excludeEntity: true/false,是否生成entity模板
     - excludeXxx: 同excludeEntity
     - excludeController: 默认true,其它层默认false
+    - customs: 对象列表,自定义模板
+      - layerName: 模板分层名
+      - subPackage: 所在子包
+      - path: 模板在resources下的相对路径
   - exclusions: 字符串数组,不生成表名含数组内字符串的所有文件,默认空
   - inclusions: 字符串数组,只生成表名含数组内字符串的所有文件,默认空
   - upstreamExclusions: 字符串数组,不生成表名含数组内字符串的service、serviceImpl、controller文件,默认空
@@ -82,4 +63,26 @@
   - logicDeleteFieldName: 全局逻辑删除字段名,默认空
   - tablePrefix: 字符串数组,表名前缀,默认空
     
-    
+- ## ftl模板常用变量
+  - package: 包路径变量
+    - Entity: entity完整包路径,如io.github.test.entity
+    - Mapper
+    - Service
+    - ServiceImpl
+    - Controller
+  - table: 表信息
+    - comment: 注释
+    - name: 表名
+    - entityName: 当前表对应生成的entity文件名,如UserBase.java
+    - constantName: 当前表对应生成的constant文件名,如UserBase.java
+    - mapperName: 同上
+    - xmlName: 同上
+    - serviceName: 同上
+    - serviceImplName: 同上
+    - controllerName: 同上
+    - fields: 字段列表(以下为每个字段遍历时的常用属性)
+      - table: 表名
+      - propertyType: 属性类型
+      - propertyName: 属性名
+      - name: db字段名
+      - comment: 字段注释

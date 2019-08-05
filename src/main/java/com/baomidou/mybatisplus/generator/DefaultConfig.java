@@ -49,7 +49,7 @@ public class DefaultConfig {
                 // 策略配置项
                 .setStrategy(strategyConfig())
                 // 模板生成设置
-                .setTemplate(new TemplateConfig().excludeController())
+                .setTemplate(new TemplatePaths().excludeController())
                 // 选择模板引擎
                 .setTemplateEngine(new FreemarkerTemplateEngine());
     }
@@ -74,7 +74,7 @@ public class DefaultConfig {
                 // 策略配置项
                 .setStrategy(strategyConfig())
                 // 模板生成设置
-                .setTemplate(new TemplateConfig())
+                .setTemplate(new TemplatePaths())
                 // 选择模板引擎
                 .setTemplateEngine(new FreemarkerTemplateEngine());
     }

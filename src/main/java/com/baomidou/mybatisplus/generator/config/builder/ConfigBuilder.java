@@ -25,6 +25,8 @@ import com.baomidou.mybatisplus.generator.config.po.TableFill;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.querys.H2Query;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import io.github.generator.TemplateConfig;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -41,12 +43,13 @@ import java.util.*;
  * @since 2016-08-30
  */
 @Slf4j
+@Data
 public class ConfigBuilder {
 
     /**
      * 模板路径配置信息
      */
-    private final TemplateConfig template;
+    private final TemplatePaths template;
     /**
      * 数据库配置
      */
@@ -72,7 +75,7 @@ public class ConfigBuilder {
      */
     private List<TableInfo> tableInfoList;
     /**
-     * 包配置详情
+     * 包配置详情, [分层名：所在包]映射,如 Entity:io.github.test.entity
      */
     private Map<String, String> packageInfo;
     /**
@@ -91,7 +94,10 @@ public class ConfigBuilder {
      * 注入配置信息
      */
     private InjectionConfig injectionConfig;
-
+    /**
+     * 注入配置信息
+     */
+    private TemplateConfig templateConfig;
 
     /**
      * 在构造器中处理配置
@@ -103,13 +109,14 @@ public class ConfigBuilder {
      * @param globalConfig     全局配置
      */
     public ConfigBuilder(PackageConfig packageConfig, DataSourceConfig dataSourceConfig, StrategyConfig strategyConfig,
-                         TemplateConfig template, GlobalConfig globalConfig) {
+                         TemplatePaths template, GlobalConfig globalConfig, TemplateConfig templateConfig) {
         // 全局配置
         this.globalConfig = null == globalConfig ? new GlobalConfig() : globalConfig;
         // 模板配置
-        this.template = null == template ? new TemplateConfig() : template;
+        this.template = null == template ? new TemplatePaths() : template;
         // 包配置
-        handlerPackage(this.template, this.globalConfig.getOutputDir(), null == packageConfig ? new PackageConfig() : packageConfig);
+        this.templateConfig = templateConfig;
+        handlerPackage(this.template, this.globalConfig.getOutputDir(), Optional.ofNullable(packageConfig).orElseGet(PackageConfig::new), templateConfig);
         this.dataSourceConfig = dataSourceConfig;
         handlerDataSource(dataSourceConfig);
         // 策略配置
@@ -188,47 +195,57 @@ public class ConfigBuilder {
      *
      * @return 所以模板路径配置信息
      */
-    public TemplateConfig getTemplate() {
-        return template == null ? new TemplateConfig() : template;
+    public TemplatePaths getTemplate() {
+        return template == null ? new TemplatePaths() : template;
     }
-
-    // ****************************** 曝露方法 END**********************************
 
     /**
      * 处理包配置
      *
-     * @param template  TemplateConfig
+     * @param templatePaths TemplatePaths 各层模板路径
      * @param outputDir
-     * @param config    PackageConfig
+     * @param config        PackageConfig
      */
-    private void handlerPackage(TemplateConfig template, String outputDir, PackageConfig config) {
+    private void handlerPackage(TemplatePaths templatePaths, String outputDir, PackageConfig config, TemplateConfig templateConfig) {
         // 包信息
         packageInfo = new HashMap<>(8);
+        String parentPackage = config.getParent();
         packageInfo.put(ConstVal.MODULE_NAME, config.getModuleName());
-        packageInfo.put(ConstVal.ENTITY, joinPackage(config.getParent(), config.getEntity()));
-        packageInfo.put(ConstVal.CONSTANT, joinPackage(config.getParent(), config.getConstant()));
-        packageInfo.put(ConstVal.MAPPER, joinPackage(config.getParent(), config.getMapper()));
+        packageInfo.put(ConstVal.ENTITY, joinPackage(parentPackage, config.getEntity()));
+        packageInfo.put(ConstVal.CONSTANT, joinPackage(parentPackage, config.getConstant()));
+        packageInfo.put(ConstVal.MAPPER, joinPackage(parentPackage, config.getMapper()));
         packageInfo.put(ConstVal.XML, config.getXml());
-        packageInfo.put(ConstVal.SERVICE, joinPackage(config.getParent(), config.getService()));
-        packageInfo.put(ConstVal.SERVICE_IMPL, joinPackage(config.getParent(), config.getServiceImpl()));
-        packageInfo.put(ConstVal.CONTROLLER, joinPackage(config.getParent(), config.getController()));
+        packageInfo.put(ConstVal.SERVICE, joinPackage(parentPackage, config.getService()));
+        packageInfo.put(ConstVal.SERVICE_IMPL, joinPackage(parentPackage, config.getServiceImpl()));
+        packageInfo.put(ConstVal.CONTROLLER, joinPackage(parentPackage, config.getController()));
+        templateConfig.getCustoms()
+                .forEach(e -> packageInfo.put(e.getLayerName(), joinPackage(parentPackage, e.getSubPackage())));
         // 自定义路径
         Map<String, String> configPathInfo = config.getPathInfo();
         if (null != configPathInfo) {
             pathInfo = configPathInfo;
         } else {
             // 生成路径信息
-            pathInfo = new HashMap<>(6);
-            setPathInfo(pathInfo, template.getEntity(getGlobalConfig().isKotlin()), outputDir, ConstVal.ENTITY_PATH, ConstVal.ENTITY);
-            setPathInfo(pathInfo, template.getConstant(), outputDir, ConstVal.CONSTANT_PATH, ConstVal.CONSTANT);
-            setPathInfo(pathInfo, template.getMapper(), outputDir, ConstVal.MAPPER_PATH, ConstVal.MAPPER);
-            setPathInfo(pathInfo, template.getXml(), outputDir.replaceFirst("main(\\\\|/)java", "main/resources"), ConstVal.XML_PATH, ConstVal.XML);
-            setPathInfo(pathInfo, template.getService(), outputDir, ConstVal.SERVICE_PATH, ConstVal.SERVICE);
-            setPathInfo(pathInfo, template.getServiceImpl(), outputDir, ConstVal.SERVICE_IMPL_PATH, ConstVal.SERVICE_IMPL);
-            setPathInfo(pathInfo, template.getController(), outputDir, ConstVal.CONTROLLER_PATH, ConstVal.CONTROLLER);
+            pathInfo = new HashMap<>(8);
+            setPathInfo(pathInfo, templatePaths.getEntity(getGlobalConfig().isKotlin()), outputDir, ConstVal.ENTITY_PATH, ConstVal.ENTITY);
+            setPathInfo(pathInfo, templatePaths.getConstant(), outputDir, ConstVal.CONSTANT_PATH, ConstVal.CONSTANT);
+            setPathInfo(pathInfo, templatePaths.getMapper(), outputDir, ConstVal.MAPPER_PATH, ConstVal.MAPPER);
+            setPathInfo(pathInfo, templatePaths.getXml(), outputDir.replaceFirst("main([\\\\/])java", "main/resources"), ConstVal.XML_PATH, ConstVal.XML);
+            setPathInfo(pathInfo, templatePaths.getService(), outputDir, ConstVal.SERVICE_PATH, ConstVal.SERVICE);
+            setPathInfo(pathInfo, templatePaths.getServiceImpl(), outputDir, ConstVal.SERVICE_IMPL_PATH, ConstVal.SERVICE_IMPL);
+            setPathInfo(pathInfo, templatePaths.getController(), outputDir, ConstVal.CONTROLLER_PATH, ConstVal.CONTROLLER);
+            templateConfig.getCustoms()
+                    .forEach(e -> setPathInfo(pathInfo, e.getPath(), outputDir, e.getLayerName(), e.getLayerName()));
         }
     }
 
+    /**
+     * @param pathInfo
+     * @param template  模板路径
+     * @param outputDir 输出根目录
+     * @param path
+     * @param module
+     */
     private void setPathInfo(Map<String, String> pathInfo, String template, String outputDir, String path, String module) {
         if (StringUtils.isNotEmpty(template)) {
             pathInfo.put(path, joinPath(outputDir, packageInfo.get(module)));
@@ -299,11 +316,13 @@ public class ConfigBuilder {
             // 自定义处理实体名称
             entityName = null != nameConvert ? nameConvert.entityNameConvert(tableInfo)
                     : NamingStrategy.capitalFirst(processName(tableInfo.getName(), strategy, tablePrefix));
-            (StringUtils.isNotEmpty(globalConfig.getEntityName())
-                    ? tableInfo.setConvert(true).setConvert(true).setEntityName(String.format(globalConfig.getEntityName(), entityName))
-                    : tableInfo.setEntityName(strategyConfig, entityName))
-                    .setConstantName(StringUtils.isNotEmpty(globalConfig.getConstantName()) ?
-                            String.format(globalConfig.getConstantName(), entityName) : entityName + ConstVal.CONSTANT)
+            if (StringUtils.isNotEmpty(globalConfig.getEntityName())) {
+                tableInfo.setConvert(true).setConvert(true).setEntityName(String.format(globalConfig.getEntityName(), entityName));
+            } else {
+                tableInfo.setEntityName(strategyConfig, entityName);
+            }
+            tableInfo.setConstantName(StringUtils.isNotEmpty(globalConfig.getConstantName()) ?
+                    String.format(globalConfig.getConstantName(), entityName) : entityName + ConstVal.CONSTANT)
                     .setMapperName(StringUtils.isNotEmpty(globalConfig.getMapperName()) ?
                             String.format(globalConfig.getMapperName(), entityName) : entityName + ConstVal.MAPPER)
                     .setXmlName(StringUtils.isNotEmpty(globalConfig.getXmlName()) ?

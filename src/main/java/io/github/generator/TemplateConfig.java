@@ -15,7 +15,7 @@ import java.util.List;
  **/
 @Data
 @Accessors(chain = true)
-public class TemplatePath {
+public class TemplateConfig {
     private String entity;
     private String constant;
     private String dao;
@@ -30,6 +30,7 @@ public class TemplatePath {
     private Boolean excludeService = false;
     private Boolean excludeServiceImpl = false;
     private Boolean excludeController = true;
+    private List<ExtendTemplateConfig> customs = new ArrayList<>();
     private File resourcesPath;
 
     public List<String> templatePaths() {
@@ -39,11 +40,12 @@ public class TemplatePath {
                 .addPath(paths, xml)
                 .addPath(paths, service)
                 .addPath(paths, serviceImpl)
+                .addPath(paths, serviceImpl)
                 .addPath(paths, controller);
         return paths;
     }
 
-    private TemplatePath addPath(List<String> paths, String path) {
+    private TemplateConfig addPath(List<String> paths, String path) {
         if (path == null) {
             return this;
         }

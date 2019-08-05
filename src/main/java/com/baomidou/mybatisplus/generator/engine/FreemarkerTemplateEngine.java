@@ -21,12 +21,11 @@ import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,11 +35,11 @@ import java.util.Map;
  * @since 2018-01-11
  */
 @Data
+@Accessors(chain = true)
 public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
 
     private Configuration configuration;
     private Configuration customConfiguration;
-    private List<String> customTemplates = Collections.emptyList();
 
     @Override
     public FreemarkerTemplateEngine init(ConfigBuilder configBuilder) throws IOException {
@@ -59,7 +58,7 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
 
     @Override
     public void writer(Map<String, Object> objectMap, String templatePath, String outputFile) throws Exception {
-        Template template = customTemplates.contains(templatePath) ? customConfiguration.getTemplate(templatePath)
+        Template template = getCustomTemplates().contains(templatePath) ? customConfiguration.getTemplate(templatePath)
                 : configuration.getTemplate(templatePath);
         try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile)) {
             template.process(objectMap, new OutputStreamWriter(fileOutputStream, ConstVal.UTF8));

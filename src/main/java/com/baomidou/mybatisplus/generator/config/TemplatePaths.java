@@ -16,7 +16,7 @@
 package com.baomidou.mybatisplus.generator.config;
 
 import com.baomidou.mybatisplus.generator.AutoGenerator;
-import io.github.generator.TemplatePath;
+import io.github.generator.TemplateConfig;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -35,7 +35,7 @@ import java.util.function.BiFunction;
 @Data
 @Accessors(chain = true)
 @ToString(exclude = "autoGenerator")
-public class TemplateConfig {
+public class TemplatePaths {
 
     @Getter(AccessLevel.NONE)
     private String entity = ConstVal.TEMPLATE_ENTITY_JAVA;
@@ -46,13 +46,11 @@ public class TemplateConfig {
     private String mapper = ConstVal.TEMPLATE_MAPPER;
     private String xml = ConstVal.TEMPLATE_XML;
     private String controller = ConstVal.TEMPLATE_CONTROLLER;
+    private AutoGenerator autoGenerator;
 
     public String getEntity(boolean kotlin) {
         return kotlin ? entityKt : entity;
     }
-
-
-    private AutoGenerator autoGenerator;
 
     public AutoGenerator backGenerator() {
         return autoGenerator;
@@ -61,47 +59,47 @@ public class TemplateConfig {
     /**
      * 不生成Controller
      *
-     * @return TemplateConfig
+     * @return TemplatePaths
      */
-    public TemplateConfig excludeController() {
+    public TemplatePaths excludeController() {
         return setController(null);
     }
 
     /**
      * 不生成Controller
      *
-     * @return TemplateConfig
+     * @return TemplatePaths
      */
-    public TemplateConfig useEnumConstant() {
+    public TemplatePaths useEnumConstant() {
         return setConstant(ConstVal.TEMPLATE_ENTITY_CONSTANT_ENUM);
     }
 
-    public TemplateConfig computePath(String path, BiFunction<TemplateConfig, String, TemplateConfig> setFunc) {
+    public TemplatePaths computePath(String path, BiFunction<TemplatePaths, String, TemplatePaths> setFunc) {
         return StringUtils.isNotEmpty(path) ? setFunc.apply(this, StringUtils.substringBefore(path, ".ftl")) : this;
     }
 
-    public TemplateConfig parseTemplatePath(TemplatePath templatePath) {
-        if (templatePath == null) {
+    public TemplatePaths parseTemplatePath(TemplateConfig templateConfig) {
+        if (templateConfig == null) {
             return this;
         }
-        computePath(templatePath.getEntity(), TemplateConfig::setEntity);
-        computePath(templatePath.getConstant(), TemplateConfig::setConstant);
-        computePath(templatePath.getDao(), TemplateConfig::setMapper);
-        computePath(templatePath.getXml(), TemplateConfig::setXml);
-        computePath(templatePath.getService(), TemplateConfig::setService);
-        computePath(templatePath.getServiceImpl(), TemplateConfig::setServiceImpl);
-        computePath(templatePath.getController(), TemplateConfig::setController);
-        excludeIf(templatePath.getExcludeEntity(), TemplateConfig::setEntity, null);
-        excludeIf(templatePath.getExcludeConstant(), TemplateConfig::setConstant, null);
-        excludeIf(templatePath.getExcludeDao(), TemplateConfig::setMapper, null);
-        excludeIf(templatePath.getExcludeXml(), TemplateConfig::setXml, null);
-        excludeIf(templatePath.getExcludeService(), TemplateConfig::setService, null);
-        excludeIf(templatePath.getExcludeServiceImpl(), TemplateConfig::setServiceImpl, null);
-        excludeIf(templatePath.getExcludeController(), TemplateConfig::setController, null);
+        computePath(templateConfig.getEntity(), TemplatePaths::setEntity);
+        computePath(templateConfig.getConstant(), TemplatePaths::setConstant);
+        computePath(templateConfig.getDao(), TemplatePaths::setMapper);
+        computePath(templateConfig.getXml(), TemplatePaths::setXml);
+        computePath(templateConfig.getService(), TemplatePaths::setService);
+        computePath(templateConfig.getServiceImpl(), TemplatePaths::setServiceImpl);
+        computePath(templateConfig.getController(), TemplatePaths::setController);
+        excludeIf(templateConfig.getExcludeEntity(), TemplatePaths::setEntity, null);
+        excludeIf(templateConfig.getExcludeConstant(), TemplatePaths::setConstant, null);
+        excludeIf(templateConfig.getExcludeDao(), TemplatePaths::setMapper, null);
+        excludeIf(templateConfig.getExcludeXml(), TemplatePaths::setXml, null);
+        excludeIf(templateConfig.getExcludeService(), TemplatePaths::setService, null);
+        excludeIf(templateConfig.getExcludeServiceImpl(), TemplatePaths::setServiceImpl, null);
+        excludeIf(templateConfig.getExcludeController(), TemplatePaths::setController, null);
         return this;
     }
 
-    private <T> TemplateConfig excludeIf(boolean isExclude, BiFunction<TemplateConfig, T, TemplateConfig> setFunc, T t) {
+    private <T> TemplatePaths excludeIf(boolean isExclude, BiFunction<TemplatePaths, T, TemplatePaths> setFunc, T t) {
         return isExclude ? setFunc.apply(this, t) : this;
     }
 

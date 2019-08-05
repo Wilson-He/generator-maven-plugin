@@ -31,7 +31,7 @@ public class GenerateProcessorMojo extends AbstractMojo {
     @Parameter
     private DataSourceProperties dataSource;
     @Parameter
-    private TemplatePath templates;
+    private TemplateConfig templates;
     /**
      * 逻辑删除属性名称
      */
@@ -80,7 +80,7 @@ public class GenerateProcessorMojo extends AbstractMojo {
                     .setLogicDeleteFieldName(logicDeleteFieldName)
                     .includeKeywords()
                     .backGenerator()
-                    .getTemplateConfig()
+                    .getTemplatePaths()
                     .parseTemplatePath(templates)
                     .backGenerator()
                     .execute(Optional.ofNullable(templates)

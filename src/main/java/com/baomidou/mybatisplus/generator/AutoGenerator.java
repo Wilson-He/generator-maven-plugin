@@ -24,7 +24,8 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import io.github.generator.TemplatePath;
+import io.github.generator.ExtendTemplateConfig;
+import io.github.generator.TemplateConfig;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -36,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 生成文件
@@ -73,7 +75,7 @@ public class AutoGenerator {
     /**
      * 模板 相关配置
      */
-    private TemplateConfig templateConfig;
+    private TemplatePaths templatePaths;
     /**
      * 全局 相关配置
      */
@@ -86,25 +88,29 @@ public class AutoGenerator {
     /**
      * 生成代码
      */
-    public void execute(TemplatePath templatePath) throws IOException {
+    public void execute(TemplateConfig templateConfig) throws IOException {
         logger.debug("==========================准备生成文件...==========================");
         // 初始化配置
         if (null == config) {
-            config = new ConfigBuilder(packageInfo, dataSource, strategy, templateConfig, globalConfig);
+            config = new ConfigBuilder(packageInfo, dataSource, strategy, templatePaths, globalConfig, templateConfig);
             if (null != injectionConfig) {
                 injectionConfig.setConfig(config);
             }
         }
         if (null == templateEngine) {
-            // 为了兼容之前逻辑，采用 Velocity 引擎 【 默认 】
             templateEngine = new FreemarkerTemplateEngine();
         }
         // 模板引擎初始化执行文件输出
-        if (templatePath != null) {
-            templateEngine.setResourcesDir(templatePath.getResourcesPath());
-            templateEngine.setCustomTemplates(templatePath.templatePaths());
+        if (templateConfig != null) {
+            templateEngine.setResourcesDir(templateConfig.getResourcesPath())
+                    .setCustomTemplates(templateConfig.templatePaths());
+            templateEngine.getCustomTemplates()
+                    .addAll(templateConfig.getCustoms()
+                            .stream()
+                            .map(ExtendTemplateConfig::getPath)
+                            .collect(Collectors.toList()));
         }
-        templateEngine.init(this.pretreatmentConfigBuilder(config)).mkdirs().batchOutput().open();
+        templateEngine.init(this.pretreatmentConfigBuilder(config)).mkdirs().batchOutput();
         logger.debug("==========================文件生成完成！！！==========================");
     }
 
@@ -202,8 +208,8 @@ public class AutoGenerator {
         return this;
     }
 
-    public AutoGenerator setTemplate(TemplateConfig template) {
-        this.templateConfig = template.setAutoGenerator(this);
+    public AutoGenerator setTemplate(TemplatePaths template) {
+        this.templatePaths = template.setAutoGenerator(this);
         return this;
     }
 
