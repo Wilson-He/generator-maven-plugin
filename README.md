@@ -27,7 +27,9 @@
 - ## 目前支持的配置项
   - outputDirectory: 输出绝对路径,默认生成到当前pom项目模块的target/generate-sources下
   - basePackage: 各层文件生成的基包[**必填项**]
-  - isCleanBefore(boolean): 文件生成前是否清空当前模块下的target目录,默认false-不清空
+  - isCleanBefore(boolean): 文件生成前是否清空当前模块下的target目录,默认false
+  - useSwagger(boolean):生成文件是否带swagger注解,默认false
+  - superEntityClass:entity父类，完整包路径.类名
   - dataSource: 数据库配置[**必填项**]
     - url
     - username
@@ -51,7 +53,7 @@
     - excludeXxx: 同excludeEntity
     - excludeController: 默认true,其它层默认false
     - customs: 对象列表,自定义模板
-      - layerName: 模板分层名
+      - layerName: 模板分层名(请勿使用已存在ftl变量)
       - subPackage: 所在子包
       - path: 模板在resources下的相对路径
   - exclusions: 字符串数组,不生成表名含数组内字符串的所有文件,默认空
