@@ -16,7 +16,7 @@ public class DataSourceProperties {
     private String username;
     private String password;
 
-    public DataSourceConfig toDataSourceConfig() {
+    DataSourceConfig toDataSourceConfig() {
         Objects.requireNonNull(driverType, "driverType不能为空");
         Objects.requireNonNull(url, "url不能为空");
         Objects.requireNonNull(username, "username不能为空");

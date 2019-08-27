@@ -384,7 +384,6 @@ public class ConfigBuilder {
         List<TableInfo> excludeTableList = new ArrayList<>();
 
         //不存在的表名
-        Set<String> notExistTables = new HashSet<>();
         try {
             String tablesSql = dbQuery.tablesSql();
             if (DbType.POSTGRE_SQL == dbQuery.dbType()) {
@@ -467,19 +466,6 @@ public class ConfigBuilder {
             e.printStackTrace();
         }
         return processTable(includeTableList, config.getNaming(), config);
-    }
-
-
-    /**
-     * 表名匹配
-     *
-     * @param setTableName 设置表名
-     * @param dbTableName  数据库表单
-     * @return ignore
-     */
-    private boolean tableNameMatches(String setTableName, String dbTableName) {
-        return setTableName.equals(dbTableName)
-                || StringUtils.matches(setTableName, dbTableName);
     }
 
     /**

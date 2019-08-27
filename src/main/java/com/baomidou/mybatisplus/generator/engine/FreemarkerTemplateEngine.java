@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -57,7 +58,7 @@ public class FreemarkerTemplateEngine extends AbstractTemplateEngine {
 
 
     @Override
-    public void writer(Map<String, Object> objectMap, String templatePath, String outputFile) throws Exception {
+    public void writer(Map<String, Object> objectMap, String templatePath, String outputFile) throws IOException, TemplateException {
         Template template = getCustomTemplates().contains(templatePath) ? customConfiguration.getTemplate(templatePath)
                 : configuration.getTemplate(templatePath);
         try (FileOutputStream fileOutputStream = new FileOutputStream(outputFile)) {

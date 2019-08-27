@@ -83,7 +83,10 @@ public class MySqlTypeConvert implements ITypeConvert {
                         default:
                             return DbColumnType.LOCAL_DATE_TIME;
                     }
+                default:
+                    break;
             }
+
         }
         return DbColumnType.STRING;
     }

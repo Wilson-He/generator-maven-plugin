@@ -27,6 +27,7 @@
 - ## 目前支持的配置项
   - outputDirectory: 输出绝对路径,默认生成到当前pom项目模块的target/generate-sources下
   - basePackage: 各层文件生成的基包[**必填项**]
+  - isCleanBefore(boolean): 文件生成前是否清空当前模块下的target目录,默认false-不清空
   - dataSource: 数据库配置[**必填项**]
     - url
     - username

@@ -120,7 +120,7 @@ public class AutoGenerator {
      * @param config 配置信息
      * @return ignore
      */
-    protected List<TableInfo> getAllTableInfoList(ConfigBuilder config) {
+    private List<TableInfo> getAllTableInfoList(ConfigBuilder config) {
         return config.getTableInfoList();
     }
 
@@ -130,7 +130,7 @@ public class AutoGenerator {
      * @param config 总配置信息
      * @return 解析数据结果集
      */
-    protected ConfigBuilder pretreatmentConfigBuilder(ConfigBuilder config) {
+    private ConfigBuilder pretreatmentConfigBuilder(ConfigBuilder config) {
         /*
          * 注入自定义配置
          */

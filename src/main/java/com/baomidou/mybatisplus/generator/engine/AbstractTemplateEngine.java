@@ -27,6 +27,7 @@ import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.TemplatePaths;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import freemarker.template.TemplateException;
 import io.github.generator.ExtendTemplateConfig;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -175,7 +176,7 @@ public abstract class AbstractTemplateEngine {
      * @param templatePath 模板文件
      * @param outputFile   文件生成的目录
      */
-    public abstract void writer(Map<String, Object> objectMap, String templatePath, String outputFile) throws Exception;
+    public abstract void writer(Map<String, Object> objectMap, String templatePath, String outputFile) throws IOException, TemplateException;
 
     /**
      * 处理输出目录
@@ -192,38 +193,13 @@ public abstract class AbstractTemplateEngine {
         return this;
     }
 
-
-    /**
-     * 打开输出目录
-     */
-    public void open() {
-        String outDir = getConfigBuilder().getGlobalConfig().getOutputDir();
-        if (getConfigBuilder().getGlobalConfig().isOpen() && StringUtils.isNotEmpty(outDir)) {
-            try {
-                String osName = System.getProperty("os.name");
-                if (osName != null) {
-                    if (osName.contains("Mac")) {
-                        Runtime.getRuntime().exec("open " + outDir);
-                    } else if (osName.contains("Windows")) {
-                        Runtime.getRuntime().exec("cmd /c start " + outDir);
-                    } else {
-                        logger.debug("文件输出目录: {}", outDir);
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
     /**
      * 渲染对象 MAP 信息
      *
      * @param tableInfo 表信息对象
      * @return ignore
      */
-    public Map<String, Object> getObjectMap(TableInfo tableInfo) {
+    private Map<String, Object> getObjectMap(TableInfo tableInfo) {
         Map<String, Object> objectMap = new HashMap<>(30);
         ConfigBuilder config = getConfigBuilder();
         if (config.getStrategyConfig().isControllerMappingHyphenStyle()) {
@@ -294,7 +270,7 @@ public abstract class AbstractTemplateEngine {
      * @param filePath
      * @return 文件是否存在
      */
-    protected boolean isCreate(String filePath) {
+    private boolean isCreate(String filePath) {
         // 自定义判断
         // 全局判断【默认】
         File file = new File(filePath);
@@ -310,17 +286,8 @@ public abstract class AbstractTemplateEngine {
      *
      * @return 文件后缀
      */
-    protected String suffixJavaOrKt() {
+    private String suffixJavaOrKt() {
         return getConfigBuilder().getGlobalConfig().isKotlin() ? ConstVal.KT_SUFFIX : ConstVal.JAVA_SUFFIX;
     }
 
-
-    public ConfigBuilder getConfigBuilder() {
-        return configBuilder;
-    }
-
-    public AbstractTemplateEngine setConfigBuilder(ConfigBuilder configBuilder) {
-        this.configBuilder = configBuilder;
-        return this;
-    }
 }

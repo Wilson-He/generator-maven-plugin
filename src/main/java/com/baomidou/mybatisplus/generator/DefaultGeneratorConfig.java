@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
 /**
+ * @author Wilson
  * 获取生成器各默认配置实例工厂类
  */
 public class DefaultGeneratorConfig {

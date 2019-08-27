@@ -3,6 +3,7 @@ package io.github.generator;
 import com.baomidou.mybatisplus.generator.DefaultGeneratorConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -19,7 +20,6 @@ import java.util.Optional;
  * @phase generate-sources
  * @requiresDependencyResolution compile
  **/
-@Data
 @Mojo(name = "generate", defaultPhase = LifecyclePhase.PACKAGE)
 @Slf4j
 public class GenerateProcessorMojo extends AbstractMojo {
@@ -37,6 +37,8 @@ public class GenerateProcessorMojo extends AbstractMojo {
      */
     @Parameter
     private String logicDeleteFieldName;
+    @Parameter
+    private String author;
     /**
      * 根据关键字排除生成表名含关键字的Service、Controller,
      */
@@ -53,6 +55,11 @@ public class GenerateProcessorMojo extends AbstractMojo {
     @Parameter
     private String[] inclusions;
     /**
+     * 生成前是否清空当前模块的target目录
+     */
+    @Parameter(defaultValue = "false")
+    private Boolean isCleanBefore;
+    /**
      * 不生成含指定正则的文件
      */
     @Parameter
@@ -66,9 +73,16 @@ public class GenerateProcessorMojo extends AbstractMojo {
         MavenProject mavenProject = (MavenProject) getPluginContext().get("project");
         File basedir = mavenProject.getBasedir();
         try {
+            if (isCleanBefore) {
+                File targetDir = new File(basedir + File.separator + "target");
+                if (targetDir.exists() && targetDir.isDirectory()) {
+                    FileUtils.cleanDirectory(targetDir);
+                }
+            }
             DefaultGeneratorConfig.defaultAutoGenerator(basePackage, dataSource.toDataSourceConfig())
                     .getGlobalConfig()
                     .initName(templates)
+                    .setAuthor(Optional.ofNullable(author).orElse(""))
                     .setOutputDir(outputDirectory.getAbsolutePath())
                     .backGenerator()
                     .getStrategy()

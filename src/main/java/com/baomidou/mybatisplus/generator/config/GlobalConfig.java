@@ -119,11 +119,10 @@ public class GlobalConfig {
                 .compute(templates.getDaoPattern() != null, GlobalConfig::setMapperName, templates.getDaoPattern())
                 .compute(templates.getServicePattern() != null, GlobalConfig::setServiceName, templates.getServicePattern())
                 .compute(templates.getServiceImplPattern() != null, GlobalConfig::setServiceImplName, templates.getServiceImplPattern())
-                .compute(templates.getConstantPattern() != null, GlobalConfig::setControllerName, templates.getControllerPattern())
-                ;
+                .compute(templates.getConstantPattern() != null, GlobalConfig::setControllerName, templates.getControllerPattern());
     }
 
-    public GlobalConfig compute(boolean isExecute, BiFunction<GlobalConfig, String, GlobalConfig> setFunc, String val) {
+    private GlobalConfig compute(boolean isExecute, BiFunction<GlobalConfig, String, GlobalConfig> setFunc, String val) {
         return isExecute ? setFunc.apply(this, val) : this;
     }
 
