@@ -86,42 +86,58 @@
       - comment: 字段注释
       
   - ## 详细配置例子
+    - pom配置
   
-        <plugin>
-            <groupId>io.github.wilson-he</groupId>
-            <artifactId>generator-maven-plugin</artifactId>
-            <version>0.0.2</version>
-            <configuration>
-                <basePackage>io.github.test</basePackage>
-                <dataSource>
-                    <url><![CDATA[jdbc:mysql://localhost:3306/wilson?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false]]></url>
-                    <username>root</username>
-                    <password>tiger</password>
-                    <driverType>MYSQL</driverType>
-                </dataSource>
-                <exclusions>
-                    <param>relation</param>
-                </exclusions>
-                <upstreamExclusions>
-                    <param>detail</param>
-                </upstreamExclusions>
-                <templates>
-                    <entity>/templates/custom-entity.java.ftl</entity>
-                    <excludeServiceImpl>true</excludeServiceImpl>
-                    <customs>
-                        <param>
-                            <path>/templates/manager.ftl</path>
-                            <subPackage>manager</subPackage>
-                            <layerName>Manager</layerName>
-                        </param>
-                    </customs>
-                </templates>
-            </configuration>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>generate</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
+          <plugin>
+              <groupId>io.github.wilson-he</groupId>
+              <artifactId>generator-maven-plugin</artifactId>
+              <version>LATEST</version>
+              <configuration>
+                  <basePackage>io.github.test</basePackage>
+                  <dataSource>
+                      <url><![CDATA[jdbc:mysql://localhost:3306/wilson?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false]]></url>
+                      <username>root</username>
+                      <password>tiger</password>
+                      <driverType>MYSQL</driverType>
+                  </dataSource>
+                  <exclusions>
+                      <param>relation</param>
+                  </exclusions>
+                  <upstreamExclusions>
+                      <param>detail</param>
+                  </upstreamExclusions>
+                  <templates>
+                      <entityPath>/templates/custom-entity.java.ftl</entity>
+                      <excludeServiceImpl>true</excludeServiceImpl>
+                      <customs>
+                          <param>
+                              <path>/templates/manager.ftl</path>
+                              <subPackage>manager</subPackage>
+                              <layerName>Manager</layerName>
+                          </param>
+                      </customs>
+                  </templates>
+              </configuration>
+              <executions>
+                  <execution>
+                      <goals>
+                          <goal>generate</goal>
+                      </goals>
+                  </execution>
+              </executions>
+          </plugin>
+     - /src/resources/Manager.ftl
+
+           package ${package.Manager};
+       
+           /**<#if table.comment??>${"\n"} * <p>
+            * ${entity}-${table.comment!}业务接口
+            * </p>
+            * </#if>
+            * @author ${author}
+            * @since ${date}
+            */
+           public class ${entity}Manager {
+           
+           }
+  
