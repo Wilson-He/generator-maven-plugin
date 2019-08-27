@@ -33,12 +33,19 @@
     - password
     - driverType:数据库驱动类型(MYSQL,ORACLE,POSTGRE_SQL)
   - templates: 自定义模板配置、模板生成配置,不配置则使用默认模板配置生成
-    - entity: resources下的自定义entity模板相对路径
-    - constant
-    - dao
-    - xml
-    - service
-    - serviceImpl
+    - entityPath: resources下的自定义entity模板相对路径
+    - constantPath
+    - daoPath
+    - xmlPath
+    - servicePath
+    - serviceImplPath
+    - controllerPath
+    - entityPattern: entity名称样式，如:%sDO将以{tableName}DO命名生成
+    - daoPattern
+    - xmlPattern
+    - servicePattern
+    - serviceImplPattern
+    - controllerPattern
     - excludeEntity: true/false,是否生成entity模板
     - excludeXxx: 同excludeEntity
     - excludeController: 默认true,其它层默认false

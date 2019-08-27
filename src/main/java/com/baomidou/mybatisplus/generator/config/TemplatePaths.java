@@ -82,13 +82,13 @@ public class TemplatePaths {
         if (templateConfig == null) {
             return this;
         }
-        computePath(templateConfig.getEntity(), TemplatePaths::setEntity);
-        computePath(templateConfig.getConstant(), TemplatePaths::setConstant);
-        computePath(templateConfig.getDao(), TemplatePaths::setMapper);
-        computePath(templateConfig.getXml(), TemplatePaths::setXml);
-        computePath(templateConfig.getService(), TemplatePaths::setService);
-        computePath(templateConfig.getServiceImpl(), TemplatePaths::setServiceImpl);
-        computePath(templateConfig.getController(), TemplatePaths::setController);
+        computePath(templateConfig.getEntityPath(), TemplatePaths::setEntity);
+        computePath(templateConfig.getConstantPath(), TemplatePaths::setConstant);
+        computePath(templateConfig.getDaoPath(), TemplatePaths::setMapper);
+        computePath(templateConfig.getXmlPath(), TemplatePaths::setXml);
+        computePath(templateConfig.getServicePath(), TemplatePaths::setService);
+        computePath(templateConfig.getServiceImplPath(), TemplatePaths::setServiceImpl);
+        computePath(templateConfig.getControllerPath(), TemplatePaths::setController);
         excludeIf(templateConfig.getExcludeEntity(), TemplatePaths::setEntity, null);
         excludeIf(templateConfig.getExcludeConstant(), TemplatePaths::setConstant, null);
         excludeIf(templateConfig.getExcludeDao(), TemplatePaths::setMapper, null);

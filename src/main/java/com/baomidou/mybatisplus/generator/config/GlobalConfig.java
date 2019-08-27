@@ -18,8 +18,11 @@ package com.baomidou.mybatisplus.generator.config;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
+import io.github.generator.TemplateConfig;
 import lombok.Data;
 import lombok.experimental.Accessors;
+
+import java.util.function.BiFunction;
 
 /**
  * 全局配置
@@ -106,4 +109,22 @@ public class GlobalConfig {
     public AutoGenerator backGenerator() {
         return autoGenerator;
     }
+
+    public GlobalConfig initName(TemplateConfig templates) {
+        if (templates == null) {
+            return this;
+        }
+        return compute(templates.getEntityPattern() != null, GlobalConfig::setEntityName, templates.getEntityPattern())
+                .compute(templates.getXmlPattern() != null, GlobalConfig::setXmlName, templates.getXmlPattern())
+                .compute(templates.getDaoPattern() != null, GlobalConfig::setMapperName, templates.getDaoPattern())
+                .compute(templates.getServicePattern() != null, GlobalConfig::setServiceName, templates.getServicePattern())
+                .compute(templates.getServiceImplPattern() != null, GlobalConfig::setServiceImplName, templates.getServiceImplPattern())
+                .compute(templates.getConstantPattern() != null, GlobalConfig::setControllerName, templates.getControllerPattern())
+                ;
+    }
+
+    public GlobalConfig compute(boolean isExecute, BiFunction<GlobalConfig, String, GlobalConfig> setFunc, String val) {
+        return isExecute ? setFunc.apply(this, val) : this;
+    }
+
 }

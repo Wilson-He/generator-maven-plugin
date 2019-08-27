@@ -16,13 +16,20 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class TemplateConfig {
-    private String entity;
-    private String constant;
-    private String dao;
-    private String xml;
-    private String service;
-    private String serviceImpl;
-    private String controller;
+    private String entityPattern;
+    private String constantPattern;
+    private String daoPattern;
+    private String xmlPattern;
+    private String servicePattern;
+    private String serviceImplPattern;
+    private String controllerPattern;
+    private String entityPath;
+    private String constantPath;
+    private String daoPath;
+    private String xmlPath;
+    private String servicePath;
+    private String serviceImplPath;
+    private String controllerPath;
     private Boolean excludeEntity = false;
     private Boolean excludeConstant = false;
     private Boolean excludeDao = false;
@@ -35,13 +42,13 @@ public class TemplateConfig {
 
     public List<String> templatePaths() {
         List<String> paths = new ArrayList<>();
-        addPath(paths, entity)
-                .addPath(paths, constant)
-                .addPath(paths, xml)
-                .addPath(paths, service)
-                .addPath(paths, serviceImpl)
-                .addPath(paths, serviceImpl)
-                .addPath(paths, controller);
+        addPath(paths, entityPath)
+                .addPath(paths, constantPath)
+                .addPath(paths, xmlPath)
+                .addPath(paths, servicePath)
+                .addPath(paths, serviceImplPath)
+                .addPath(paths, serviceImplPath)
+                .addPath(paths, controllerPath);
         return paths;
     }
 

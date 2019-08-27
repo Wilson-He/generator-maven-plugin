@@ -75,7 +75,7 @@ public class ConfigBuilder {
      */
     private List<TableInfo> tableInfoList;
     /**
-     * 包配置详情, [分层名：所在包]映射,如 Entity:io.github.test.entity
+     * 包配置详情, [分层名：所在包]映射,如 Entity:io.github.test.entityPath
      */
     private Map<String, String> packageInfo;
     /**

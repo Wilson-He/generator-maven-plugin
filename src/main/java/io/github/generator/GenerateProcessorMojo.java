@@ -68,6 +68,7 @@ public class GenerateProcessorMojo extends AbstractMojo {
         try {
             DefaultGeneratorConfig.defaultAutoGenerator(basePackage, dataSource.toDataSourceConfig())
                     .getGlobalConfig()
+                    .initName(templates)
                     .setOutputDir(outputDirectory.getAbsolutePath())
                     .backGenerator()
                     .getStrategy()

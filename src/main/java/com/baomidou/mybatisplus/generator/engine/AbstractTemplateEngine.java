@@ -108,7 +108,7 @@ public abstract class AbstractTemplateEngine {
                         writer(objectMap, templateFilePath(template.getEntity(getConfigBuilder().getGlobalConfig().isKotlin())), entityFile);
                     }
                 }
-                // constant
+                // constantPath
                 final boolean isWriteConstant = tableInfo.isHasEnums() && null != pathInfo.get(ConstVal.CONSTANT_PATH);
                 write(isWriteConstant, pathInfo, objectMap, ConstVal.CONSTANT_PATH, tableInfo.getConstantName(), tableInfo, template.getConstant());
                 // MpMapper.java
