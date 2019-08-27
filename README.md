@@ -5,7 +5,7 @@
       <plugin>
           <groupId>io.github.wilson-he</groupId>
           <artifactId>generator-maven-plugin</artifactId>
-          <version>0.0.2</version>
+          <version>LATEST</version>
           <configuration>
               <basePackage>io.github.test</basePackage>
               <dataSource>
