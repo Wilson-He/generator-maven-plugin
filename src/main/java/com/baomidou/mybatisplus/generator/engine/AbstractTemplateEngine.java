@@ -117,7 +117,7 @@ public abstract class AbstractTemplateEngine {
                 write(isWriteMapper, pathInfo, objectMap, ConstVal.MAPPER_PATH, tableInfo.getMapperName(), tableInfo, template.getMapper());
                 // MpMapper.mapperXml
                 final boolean isWriteXml = null != tableInfo.getXmlName() && null != pathInfo.get(ConstVal.XML_PATH);
-                write(isWriteXml, pathInfo, objectMap, ConstVal.XML_PATH, tableInfo.getXmlName(), tableInfo, template.getXml());
+                writeXml(isWriteXml, pathInfo, objectMap, ConstVal.XML_PATH, tableInfo.getXmlName(), tableInfo, template.getXml());
                 // IMpService.java
                 final boolean isWriteService = isIncludeKeywords && isExcludeKeywords && null != tableInfo.getServiceName() && null != pathInfo.get(ConstVal.SERVICE_PATH);
                 write(isWriteService, pathInfo, objectMap, ConstVal.SERVICE_PATH, tableInfo.getServiceName(), tableInfo, template.getService());
@@ -163,6 +163,16 @@ public abstract class AbstractTemplateEngine {
                        String fileName, TableInfo tableInfo, String templatePath) throws Exception {
         if (isWrite) {
             String file = String.format((pathInfo.get(pathConst) + File.separator + fileName + suffixJavaOrKt()), tableInfo.getEntityName());
+            if (isCreate(file)) {
+                writer(objectMap, templateFilePath(templatePath), file);
+            }
+        }
+    }
+
+    private void writeXml(boolean isWrite, Map<String, String> pathInfo, Map<String, Object> objectMap, String pathConst,
+                          String fileName, TableInfo tableInfo, String templatePath) throws Exception {
+        if (isWrite) {
+            String file = String.format((pathInfo.get(pathConst) + File.separator + fileName + ConstVal.XML_SUFFIX), tableInfo.getEntityName());
             if (isCreate(file)) {
                 writer(objectMap, templateFilePath(templatePath), file);
             }
