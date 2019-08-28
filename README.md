@@ -30,6 +30,7 @@
   - isCleanBefore(boolean): 文件生成前是否清空当前模块下的target目录,默认false
   - useSwagger(boolean):生成文件是否带swagger注解,默认false
   - superEntityClass:entity父类，完整包路径.类名
+  - author:模板author值,默认空
   - dataSource: 数据库配置[**必填项**]
     - url
     - username
