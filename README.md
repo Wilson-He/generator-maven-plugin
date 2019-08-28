@@ -145,4 +145,4 @@
   
 - ## Donate 
   觉得工具不错的希望可以顺手star一下或donate一下*.*
-  ![donate](https://img-blog.csdnimg.cn/20190828113142237.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3oyODEyNjMwOA==,size_16,color_FFFFFF,t_70)
+  ![donate](https://github.com/Wilson-He/pictures/blob/master/private/wechat.png?raw=true)
