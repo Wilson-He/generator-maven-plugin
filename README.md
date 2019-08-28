@@ -103,9 +103,12 @@
                       <driverType>MYSQL</driverType>
                   </dataSource>
                   <exclusions>
+                      <!-- 不生成表名含relation字符串的所有文件,默认空 -->
                       <param>relation</param>
                   </exclusions>
                   <upstreamExclusions>
+		              <!-- 不生成表名含一下关键字的自定义模板(如manager) 、service、serviceImpl、controller-->
+		              <!-- <upstreamExclusion>detail</upstreamExclusion>效果同param-->
                       <param>detail</param>
                   </upstreamExclusions>
                   <templates>
