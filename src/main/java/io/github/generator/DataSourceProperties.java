@@ -17,7 +17,9 @@ public class DataSourceProperties {
     private String password;
 
     DataSourceConfig toDataSourceConfig() {
-        Objects.requireNonNull(driverType, "driverType不能为空");
+        if(driverType == null){
+            driverType = DriverType.MYSQL;
+        }
         Objects.requireNonNull(url, "url不能为空");
         Objects.requireNonNull(username, "username不能为空");
         Objects.requireNonNull(password, "password不能为空");

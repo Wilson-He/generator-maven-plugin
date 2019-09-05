@@ -27,6 +27,9 @@ public class GenerateProcessorMojo extends AbstractMojo {
     private File outputDirectory;
     @Parameter(name = "basePackage", required = true)
     private String basePackage;
+    /**
+     * 数据库配置[url,username,password,driverType]
+     */
     @Parameter
     private DataSourceProperties dataSource;
     @Parameter
@@ -112,7 +115,7 @@ public class GenerateProcessorMojo extends AbstractMojo {
                     .backGenerator()
                     .execute(Optional.ofNullable(templates)
                             .map(e -> e.setResourcesPath(new File(basedir, RESOURCE_PATH)))
-                            .orElse(null));
+                            .orElse(new TemplateConfig()));
         } catch (IOException e) {
             log.error("生成错误", e);
         }
