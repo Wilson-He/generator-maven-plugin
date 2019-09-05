@@ -69,9 +69,9 @@ public class TableField {
      */
     private static final String COMMENT_REGEX_SUFFIX = "((\\W+|\\w+):\\W+-[a-zA-Z]+,?)+";
     /**
-     * 正则匹配常量注释范式: ({db_val}:val_comment), 例：(YES:已删除, NO:未删除)
+     * 正则匹配常量注释范式: ({db_val}:val_comment), 例：(YES-已删除, NO-未删除)
      */
-    private static final String COMMENT_REGEX_PURE = "((\\W+|\\w+):(\\W+|\\w+,?)+)";
+    private static final String COMMENT_REGEX_PURE = "((\\W+|\\w+)-(\\W+|\\w+,?)+)";
     private static final String COMMENT_REGEX = COMMENT_REGEX_PURE + "|" + COMMENT_REGEX_SUFFIX;
 
     public boolean isConstantField() {
@@ -93,7 +93,7 @@ public class TableField {
     }
 
     private void initCommentConstantList() {
-        // fieldEnumsString范例： YES:已删除,NO:未删除,D:未删除    1:已删除-YES, 0:未删除-NO
+        // fieldEnumsString范例： 已删除-YES,未删除-NO   1:已删除-YES, 0:未删除-NO
         // 值注释列表,如: [已删除,未删除]
         List<String> varComments;
         // map.key列表,如: [YES,NO]
@@ -107,10 +107,10 @@ public class TableField {
             varValues = Lists.newArrayList(fieldEnumsString.substring(0, fieldEnumsString.indexOf(':')));
             Collections.addAll(varValues, substringsBetween(comment, ",", ":"));
         } else {
-            varComments = Lists.newArrayList(substringsBetween(fieldEnumsString, ":", ","));
-            varComments.add(fieldEnumsString.substring(fieldEnumsString.lastIndexOf(':') + 1));
-            varKeys = Lists.newArrayList(fieldEnumsString.substring(0, fieldEnumsString.indexOf(':')));
-            Collections.addAll(varKeys, substringsBetween(fieldEnumsString, ",", ":"));
+            varKeys = Lists.newArrayList(substringsBetween(fieldEnumsString, "-", ","));
+            varKeys.add(fieldEnumsString.substring(fieldEnumsString.lastIndexOf('-') + 1));
+            varComments = Lists.newArrayList(fieldEnumsString.substring(0, fieldEnumsString.indexOf('-')));
+            Collections.addAll(varComments, substringsBetween(fieldEnumsString, ",", "-"));
             varValues = varKeys;
         }
         if (varValues.isEmpty()) {
