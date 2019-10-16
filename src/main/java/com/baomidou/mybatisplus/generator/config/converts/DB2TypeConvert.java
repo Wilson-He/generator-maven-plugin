@@ -29,7 +29,7 @@ import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 public class DB2TypeConvert implements ITypeConvert {
 
     @Override
-    public IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
+    public IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType, boolean bitToInteger) {
         String t = fieldType.toLowerCase();
         if (t.contains("char")) {
             return DbColumnType.STRING;
@@ -45,7 +45,7 @@ public class DB2TypeConvert implements ITypeConvert {
         } else if (t.contains("text")) {
             return DbColumnType.STRING;
         } else if (t.contains("bit")) {
-            return DbColumnType.BOOLEAN;
+            return bitToInteger ? DbColumnType.INTEGER : DbColumnType.BOOLEAN;
         } else if (t.contains("decimal")) {
             return DbColumnType.BIG_DECIMAL;
         } else if (t.contains("clob")) {

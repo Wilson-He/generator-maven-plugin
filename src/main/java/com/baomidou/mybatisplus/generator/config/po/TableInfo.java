@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import io.github.generator.ConstantCommentConfig;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -65,6 +66,7 @@ public class TableInfo {
     }
 
     protected TableInfo setConvert(StrategyConfig strategyConfig) {
+//        StringUtils.repl
         if (strategyConfig.containsTablePrefix(name)) {
             // 包含前缀
             this.convert = true;
@@ -163,7 +165,8 @@ public class TableInfo {
     }
 
     public boolean isHasEnums() {
-        this.hasEnums = Optional.ofNullable(fields).map(e -> e.stream().anyMatch(TableField::isConstantField))
+        this.hasEnums = ConstantCommentConfig.getInstance() != null
+                && Optional.ofNullable(fields).map(e -> e.stream().anyMatch(TableField::isConstantField))
                 .orElse(false);
         return hasEnums;
     }

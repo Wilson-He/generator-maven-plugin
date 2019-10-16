@@ -2,6 +2,7 @@ package com.baomidou.mybatisplus.generator.config.po;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * TableFieldComment-字段注释解析类
@@ -11,6 +12,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@ToString
 public class TableFieldComment {
     /**
      * 常量名,如String ENABLE = 1,则key = 1

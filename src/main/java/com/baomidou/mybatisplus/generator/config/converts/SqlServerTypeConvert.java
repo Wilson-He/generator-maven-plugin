@@ -29,7 +29,7 @@ import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 public class SqlServerTypeConvert implements ITypeConvert {
 
     @Override
-    public IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
+    public IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType, boolean bitToInteger) {
         String t = fieldType.toLowerCase();
         if (t.contains("char") || t.contains("xml")) {
             return DbColumnType.STRING;
@@ -65,7 +65,7 @@ public class SqlServerTypeConvert implements ITypeConvert {
         } else if (t.contains("text")) {
             return DbColumnType.STRING;
         } else if (t.contains("bit")) {
-            return DbColumnType.BOOLEAN;
+            return bitToInteger ? DbColumnType.INTEGER : DbColumnType.BOOLEAN;
         } else if (t.contains("decimal") || t.contains("numeric")) {
             return DbColumnType.DOUBLE;
         } else if (t.contains("money")) {

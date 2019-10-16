@@ -20,16 +20,15 @@ import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import com.google.common.collect.Lists;
+import io.github.generator.ConstantCommentConfig;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * 表字段信息
@@ -39,6 +38,7 @@ import java.util.regex.Pattern;
  */
 @Data
 @Accessors(chain = true)
+@Slf4j
 public class TableField {
 
     private boolean convert;
@@ -69,63 +69,37 @@ public class TableField {
      */
     private static final String COMMENT_REGEX_SUFFIX = "((\\W+|\\w+):\\W+-[a-zA-Z]+,?)+";
     /**
-     * 正则匹配常量注释范式: ({db_val}:val_comment), 例：(YES-已删除, NO-未删除)
+     * 正则匹配常量注释范式: ({db_val}:val_comment), 例：(YES-已删除, NO-未删除)   \W+-\W+
      */
     private static final String COMMENT_REGEX_PURE = "((\\W+|\\w+)-(\\W+|\\w+,?)+)";
     private static final String COMMENT_REGEX = COMMENT_REGEX_PURE + "|" + COMMENT_REGEX_SUFFIX;
 
     public boolean isConstantField() {
-        if (null == comment) {
+        if (null == comment || !comment.matches(ConstantCommentConfig.getInstance().getRegexp())) {
             return false;
         }
-        fieldEnumsString = org.apache.commons.lang3.StringUtils.substringBetween(comment, "(", ")");
-        if (null == fieldEnumsString) {
+        if (!(comment.contains("(") && comment.endsWith(")"))) {
             return false;
         }
-        fieldEnumsString = fieldEnumsString.replaceAll("\\s", "");
-        if (!Pattern.matches(COMMENT_REGEX, fieldEnumsString)) {
-            return false;
-        }
+        fieldEnumsString = org.apache.commons.lang3.StringUtils.substringBetween(comment, "(", ")")
+                .replaceAll("\\s", "");
         if (null == fieldEnums) {
             initCommentConstantList();
         }
-        return true;
+        return !fieldEnums.isEmpty();
     }
 
     private void initCommentConstantList() {
-        // fieldEnumsString范例： 已删除-YES,未删除-NO   1:已删除-YES, 0:未删除-NO
-        // 值注释列表,如: [已删除,未删除]
-        List<String> varComments;
-        // map.key列表,如: [YES,NO]
-        List<String> varKeys;
-        // map.val列表,如[YES.NO]
-        List<String> varValues;
-        if (Pattern.matches(COMMENT_REGEX_SUFFIX, fieldEnumsString)) {
-            varComments = Lists.newArrayList(substringsBetween(fieldEnumsString, ":", "-"));
-            varKeys = Lists.newArrayList(fieldEnumsString.substring(fieldEnumsString.lastIndexOf('-') + 1));
-            Collections.addAll(varKeys, substringsBetween(fieldEnumsString, "-", ","));
-            varValues = Lists.newArrayList(fieldEnumsString.substring(0, fieldEnumsString.indexOf(':')));
-            Collections.addAll(varValues, substringsBetween(comment, ",", ":"));
-        } else {
-            varKeys = Lists.newArrayList(substringsBetween(fieldEnumsString, "-", ","));
-            varKeys.add(fieldEnumsString.substring(fieldEnumsString.lastIndexOf('-') + 1));
-            varComments = Lists.newArrayList(fieldEnumsString.substring(0, fieldEnumsString.indexOf('-')));
-            Collections.addAll(varComments, substringsBetween(fieldEnumsString, ",", "-"));
-            varValues = varKeys;
-        }
-        if (varValues.isEmpty()) {
-            varValues = varKeys;
-        }
-        int constantNum = varComments.size();
-        fieldEnums = new ArrayList<>(constantNum);
         String clazz = columnType.getType();
+        ConstantCommentConfig commentConfig = ConstantCommentConfig.getInstance();
         try {
-            for (int i = 0; i < constantNum; i++) {
-                fieldEnums.add(new TableFieldComment(varKeys.get(i), varValues.get(i), varComments.get(i), clazz));
-            }
+            // key1:val1:comment1,key2:val2:comment2  key1:comment1 key2:comment2 key3:comment3
+            fieldEnums = commentConfig.fetchCommentList(fieldEnumsString, clazz);
         } catch (Exception e) {
-            String exception = "%s.%s常量范式错误,请检查范式: %s";
-            System.err.println(String.format(exception, table, name, fieldEnumsString));
+            String exceptionMsg = "%s.%s常量范式错误,请检查范式: %s";
+            System.err.println(String.format(exceptionMsg, table, name, fieldEnumsString));
+            log.error(String.format(exceptionMsg, table, name, fieldEnumsString), e);
+
         }
     }
 

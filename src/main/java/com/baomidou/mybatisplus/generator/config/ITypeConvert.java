@@ -31,7 +31,8 @@ public interface ITypeConvert {
      *
      * @param globalConfig 全局配置
      * @param fieldType    字段类型
+     * @param bitToInteger db字节转java整形
      * @return ignore
      */
-    IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType);
+    IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType, boolean bitToInteger);
 }

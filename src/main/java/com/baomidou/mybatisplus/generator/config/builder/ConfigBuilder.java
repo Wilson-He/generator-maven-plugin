@@ -553,7 +553,7 @@ public class ConfigBuilder {
                     } else {
                         field.setPropertyName(strategyConfig, processName(field.getName(), config.getNaming()));
                     }
-                    field.setColumnType(dataSourceConfig.getTypeConvert().processTypeConvert(globalConfig, field.getType()));
+                    field.setColumnType(dataSourceConfig.getTypeConvert().processTypeConvert(globalConfig, field.getType(),dataSourceConfig.isBitToInteger()));
                     field.setComment(results.getString(dbQuery.fieldComment()));
                     if (strategyConfig.includeSuperEntityColumns(field.getName())) {
                         // 跳过公共字段

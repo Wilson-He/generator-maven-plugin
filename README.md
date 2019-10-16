@@ -36,6 +36,8 @@
     - username
     - password
     - driverType:数据库驱动类型(MYSQL,ORACLE,POSTGRE_SQL)
+    - commentPattern: 注释模板配置
+    - bitToInteger:数据库bit类型转为java Integer类型,默认true
   - templates: 自定义模板配置、模板生成配置,不配置则使用默认模板配置生成
     - entityPath: resources下的自定义entity模板相对路径
     - constantPath

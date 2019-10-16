@@ -69,6 +69,7 @@ public class DataSourceConfig {
      * 数据库连接密码
      */
     private String password;
+    private boolean bitToInteger;
 
     private AutoGenerator autoGenerator;
 
@@ -203,4 +204,5 @@ public class DataSourceConfig {
         }
         return conn;
     }
+
 }

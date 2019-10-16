@@ -15,14 +15,21 @@ public class DataSourceProperties {
     private String url;
     private String username;
     private String password;
+    private boolean bitToInteger = true;
+    /**
+     * 注释样式,如: key:value:comment  key:value-comment
+     */
+    private String commentPattern;
 
     DataSourceConfig toDataSourceConfig() {
-        if(driverType == null){
+        if (driverType == null) {
             driverType = DriverType.MYSQL;
         }
         Objects.requireNonNull(url, "url不能为空");
         Objects.requireNonNull(username, "username不能为空");
         Objects.requireNonNull(password, "password不能为空");
-        return new DataSourceConfig(url, driverType.getDriverClass().getCanonicalName(), username, password);
+        ConstantCommentConfig.initInstance(commentPattern);
+        return new DataSourceConfig(url, driverType.getDriverClass().getCanonicalName(), username, password)
+                .setBitToInteger(bitToInteger);
     }
 }

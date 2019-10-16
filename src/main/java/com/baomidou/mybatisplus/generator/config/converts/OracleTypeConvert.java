@@ -29,7 +29,7 @@ import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 public class OracleTypeConvert implements ITypeConvert {
 
     @Override
-    public IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType) {
+    public IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType, boolean bitToInteger) {
         String t = fieldType.toLowerCase();
         if (t.contains("char")) {
             return DbColumnType.STRING;
