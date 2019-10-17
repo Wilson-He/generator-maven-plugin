@@ -36,8 +36,16 @@
     - username
     - password
     - driverType:数据库驱动类型(MYSQL,ORACLE,POSTGRE_SQL)
-    - commentPattern: 注释模板配置
-    - bitToInteger:数据库bit类型转为java Integer类型,默认true
+    - commentPattern: db字段注释中括号内的常量模板样式配置,key为常量的java变量名,value为变量名对应的常量值,comment为常量值注释,key、value、comment之间有且只有一个任意分隔符(逗号","除外),
+    若db字段注释只需key、comment(key=value)但仍需生成常量类,则key、comment间的分割符需为commentPattern中key、value、comment之间的分隔符之一，用例如下：
+      - commentPattern为key-value:comment,可匹配如下db字段注释
+        - 数据库is_delete(bit)字段注释：删除标志量(YES-1:已删除,NO-1:未删除),生成java常量为 /\*\*已删除**/Integer YES = 1;/\*\*未删除**/Integer NO = 0;
+        - 删除标志量(YES-已删除,NO-未删除),生成java常量为 /\*\*已删除**/String YES = "YES";/\*\*未删除**/String NO = "NO";
+        - 删除标志量(YES:已删除,NO:未删除),生成java常量为 /\*\*已删除**/String YES = "YES";/\*\*未删除**/String NO = "NO";
+      - commentPattern为key:value:comment,可匹配如下db字段注释
+        - 数据库is_delete(bit)字段注释：删除标志量(YES:1:已删除,NO:1:未删除),生成java常量为 /\*\*已删除**/Integer YES = 1;/\*\*未删除**/Integer NO = 0;
+        - 删除标志量(YES:已删除,NO:未删除),生成java常量为 /\*\*已删除**/String YES = "YES";/\*\*未删除**/String NO = "NO";
+    - bitToInteger:数据库bit类型转为java Integer类型,默认true,false将使bit转Boolean
   - templates: 自定义模板配置、模板生成配置,不配置则使用默认模板配置生成
     - entityPath: resources下的自定义entity模板相对路径
     - constantPath

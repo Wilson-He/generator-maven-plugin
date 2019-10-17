@@ -83,16 +83,6 @@ public class ConstantCommentConfig {
                 .orElse("fetch separator error");
         config.regexp = String.format(".+(%s).+", separatorRegexp);
         config.separators = separatorRegexp.split("\\|");
-        System.out.println(config);
-    }
-
-    public static void main(String[] args) {
-        String comment = ",YES:是,";
-        String keyCommentSeparator = "是";
-        System.out.println(comment.substring(1, comment.indexOf(keyCommentSeparator) - 1));
-//        int commentLength = "comment".length();
-//        System.out.println(demo.substring(commentIndex + commentLength, commentIndex + commentLength + 2));
-//        System.out.println("(PC:1,ANDROID:2,IOS:3)".matches("\\:"));
     }
 
     public static ConstantCommentConfig getInstance() {
@@ -110,7 +100,6 @@ public class ConstantCommentConfig {
         for (String separator : separators) {
             if (!comments[0].contains(separator)) {
                 justKeyComment = true;
-                System.out.println("rawString:" + rawString);
             } else {
                 keyCommentSeparator = separator;
             }
@@ -122,10 +111,8 @@ public class ConstantCommentConfig {
             if (justKeyComment) {
                 assert keyCommentSeparator != null;
                 int separatorIndex = comment.indexOf(keyCommentSeparator);
-                System.out.println("comment:" + comment + "\tkeyCommentSeparator=" + keyCommentSeparator + ",\t separatorIndex:" + separatorIndex);
                 value = StringUtils.substring(comment, 1, separatorIndex);
-                System.err.println("comment:" + comment);
-                String valComment = comment.substring(1, separatorIndex - 1);
+                String valComment = StringUtils.substring(comment, separatorIndex + 1, comment.length() - 1);
                 list.add(new TableFieldComment(value, value, valComment, clazz));
                 continue;
             } else {

@@ -16,7 +16,7 @@ public enum DriverType {
     /**
      * mysql
      */
-    MYSQL(com.mysql.jdbc.Driver.class),
+    MYSQL(com.mysql.cj.jdbc.Driver.class),
     /**
      * oracle
      */

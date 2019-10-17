@@ -28,6 +28,13 @@ public class DataSourceProperties {
         Objects.requireNonNull(url, "url不能为空");
         Objects.requireNonNull(username, "username不能为空");
         Objects.requireNonNull(password, "password不能为空");
+        if (!url.contains("?")) {
+            url = url + "?useSSL=true";
+        } else {
+            if (!url.contains("useSSL")) {
+                url += "&useSSL=true";
+            }
+        }
         ConstantCommentConfig.initInstance(commentPattern);
         return new DataSourceConfig(url, driverType.getDriverClass().getCanonicalName(), username, password)
                 .setBitToInteger(bitToInteger);
