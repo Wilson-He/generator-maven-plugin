@@ -222,6 +222,7 @@ public abstract class AbstractTemplateEngine {
         GlobalConfig globalConfig = config.getGlobalConfig();
         objectMap.put("author", globalConfig.getAuthor());
         objectMap.put("idType", globalConfig.getIdType() == null ? null : globalConfig.getIdType().toString());
+        objectMap.put("javaIdType", globalConfig.getJavaIdType());
         objectMap.put("logicDeleteFieldName", config.getStrategyConfig().getLogicDeleteFieldName());
         objectMap.put("versionFieldName", config.getStrategyConfig().getVersionFieldName());
         objectMap.put("activeRecord", globalConfig.isActiveRecord());

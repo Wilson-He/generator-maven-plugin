@@ -103,6 +103,7 @@ public class GlobalConfig {
      * 指定生成的主键的ID类型
      */
     private IdType idType;
+    private String javaIdType;
 
     private AutoGenerator autoGenerator;
 

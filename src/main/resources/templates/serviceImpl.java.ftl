@@ -16,12 +16,19 @@ import javax.annotation.Resource;
  */
 @Service
 <#if kotlin>
-    open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
+open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperName}, ${entity}>(), ${table.serviceName} {
 
-    }
+}
 <#else>
 public class ${table.serviceImplName} implements ${table.serviceName}{
     @Resource
     private ${table.mapperName} ${table.mapperName?uncap_first};
+
+    <#if javaIdType??>
+    @Override
+    public ${entity} findById(${javaIdType} id){
+        return ${table.mapperName?uncap_first}.selectById(id);
+    }
+    </#if>
 }
 </#if>

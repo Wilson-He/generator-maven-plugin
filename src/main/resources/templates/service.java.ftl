@@ -13,6 +13,6 @@ import ${package.Entity}.${entity};
 interface ${table.serviceName} : ${superServiceClass}<${entity}>
 <#else>
 public interface ${table.serviceName} {
-
+    <#if javaIdType??>${entity} findById(${javaIdType} id);</#if>
 }
 </#if>

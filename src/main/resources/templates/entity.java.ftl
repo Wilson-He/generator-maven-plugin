@@ -61,10 +61,10 @@ public class ${entity} implements Serializable {
     </#if>
     <#if field.keyFlag>
     <#-- 主键 -->
-        <#if field.keyIdentityFlag>
-    @TableId(value = "${field.name}", type = IdType.AUTO)
-        <#elseif idType??>
+        <#if idType??>
     @TableId(value = "${field.name}", type = IdType.${idType})
+        <#elseif idType??>
+    @TableId("${field.name}")
         <#elseif field.convert>
     @TableId("${field.name}")
         </#if>

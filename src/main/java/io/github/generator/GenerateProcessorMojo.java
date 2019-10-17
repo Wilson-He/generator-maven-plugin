@@ -1,5 +1,6 @@
 package io.github.generator;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.DefaultGeneratorConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -9,6 +10,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
+import javax.swing.text.html.Option;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -41,6 +43,10 @@ public class GenerateProcessorMojo extends AbstractMojo {
     private String logicDeleteFieldName;
     @Parameter
     private String author;
+    @Parameter
+    private String idType;
+    @Parameter
+    private String javaIdType;
     /**
      * entity父类，带包名
      */
@@ -96,6 +102,8 @@ public class GenerateProcessorMojo extends AbstractMojo {
                     .initName(templates)
                     .setBaseColumnList(true)
                     .setSwagger2(useSwagger)
+                    .setIdType(Optional.ofNullable(idType).map(IdType::valueOf).orElse(null))
+                    .setJavaIdType(javaIdType)
                     .setAuthor(Optional.ofNullable(author).orElse(""))
                     .setOutputDir(outputDirectory.getAbsolutePath())
                     .backGenerator()
@@ -121,4 +129,5 @@ public class GenerateProcessorMojo extends AbstractMojo {
         }
         log.info("generate finish");
     }
+
 }

@@ -31,6 +31,14 @@
   - useSwagger(boolean):生成文件是否带swagger注解,默认false
   - superEntityClass:entity父类，完整包路径.类名
   - author:模板author值,默认空
+  - idType:String类型,用于设置实体id注解IdType,默认空-不生成mybatis-plus id注解,可取值如下：
+    - AUTO:数据库ID自增
+    - NONE:该类型为未设置主键类型
+    - INPUT:用户输入ID,该类型可以通过自己注册自动填充插件进行填充
+    - ID_WORKER:全局唯一ID(只有当插入对象ID为空，才自动填充)
+    - UUID:全局唯一ID(只有当插入对象ID为空，才自动填充)
+    - ID_WORKER_STR:字符串全局唯一ID(idWorker的字符串表示,只有当插入对象ID为空，才自动填充)
+  - javaIdType,设置后生成的service将自动生成对应的findById方法
   - dataSource: 数据库配置[**必填项**]
     - url
     - username
