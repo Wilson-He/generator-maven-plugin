@@ -78,6 +78,9 @@ public class TableField {
         if (null == comment || !comment.matches(ConstantCommentConfig.getInstance().getRegexp())) {
             return false;
         }
+        if (ConstantCommentConfig.EXCLUDE_CONSTANT_FIELDS != null && ConstantCommentConfig.EXCLUDE_CONSTANT_FIELDS.contains(name)) {
+            return false;
+        }
         if (!(comment.contains("(") && comment.endsWith(")"))) {
             return false;
         }

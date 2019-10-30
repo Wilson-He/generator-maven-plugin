@@ -3,6 +3,7 @@ package io.github.generator;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -20,6 +21,10 @@ public class DataSourceProperties {
      * 注释样式,如: key:value:comment  key:value-comment
      */
     private String commentPattern;
+    /**
+     * 不生成指定字段常量类
+     */
+    private List<String> excludeConstantFields;
 
     DataSourceConfig toDataSourceConfig() {
         if (driverType == null) {
@@ -35,7 +40,7 @@ public class DataSourceProperties {
                 url += "&useSSL=true";
             }
         }
-        ConstantCommentConfig.initInstance(commentPattern);
+        ConstantCommentConfig.initInstance(commentPattern, excludeConstantFields);
         return new DataSourceConfig(url, driverType.getDriverClass().getCanonicalName(), username, password)
                 .setBitToInteger(bitToInteger);
     }

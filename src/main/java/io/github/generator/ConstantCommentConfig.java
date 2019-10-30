@@ -31,13 +31,15 @@ public class ConstantCommentConfig {
     private static final String COMMENT_FORMAT_PATTERN = ",%s,";
     public static final String SEPARATOR = ",";
     private String[] separators;
+    public static List<String> EXCLUDE_CONSTANT_FIELDS;
 
     private static ConstantCommentConfig config;
 
-    public static void initInstance(String pattern) {
+    public static void initInstance(String pattern, List<String> excludeConstantFields) {
         if (pattern == null || config != null) {
             return;
         }
+        ConstantCommentConfig.EXCLUDE_CONSTANT_FIELDS = excludeConstantFields;
         config = new ConstantCommentConfig();
         int length = pattern.length();
         if (length < MAX_PATTERN_LENGTH) {
