@@ -24,10 +24,7 @@ import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.IntStream;
 
 /**
@@ -59,14 +56,24 @@ public class TableInfo {
      */
     private List<TableField> commonFields;
     private String fieldNames;
+    private Boolean hasJsonIgnore;
+    private StrategyConfig strategyConfig;
 
     public TableInfo setConvert(boolean convert) {
         this.convert = convert;
         return this;
     }
 
+    public boolean isHasJsonIgnore() {
+        return  Optional.ofNullable(strategyConfig.getJsonIgnoreFields())
+                .map(Collection::stream)
+                .map(stream -> stream.anyMatch(ignoreField -> getFieldNames().contains(ignoreField)))
+                .orElse(false);
+    }
+
     protected TableInfo setConvert(StrategyConfig strategyConfig) {
 //        StringUtils.repl
+        this.strategyConfig = strategyConfig;
         if (strategyConfig.containsTablePrefix(name)) {
             // 包含前缀
             this.convert = true;

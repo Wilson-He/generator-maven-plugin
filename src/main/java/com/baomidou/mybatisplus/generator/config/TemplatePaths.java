@@ -96,6 +96,9 @@ public class TemplatePaths {
         excludeIf(templateConfig.getExcludeService(), TemplatePaths::setService, null);
         excludeIf(templateConfig.getExcludeServiceImpl(), TemplatePaths::setServiceImpl, null);
         excludeIf(templateConfig.getExcludeController(), TemplatePaths::setController, null);
+        if(!templateConfig.getExcludeController()){
+            this.controller = ConstVal.TEMPLATE_CONTROLLER;
+        }
         return this;
     }
 

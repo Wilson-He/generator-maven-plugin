@@ -7,6 +7,9 @@ import ${pkg};
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 </#if>
+<#if table.hasJsonIgnore>
+import com.fasterxml.jackson.annotation.JsonIgnore;
+</#if>
 <#if table.hasEnums>import ${package.Constant}.${entity}Constant;</#if>
 <#if entityLombokModel>
 import lombok.Data;
@@ -49,7 +52,6 @@ public class ${entity} implements Serializable {
     <#if field.keyFlag>
         <#assign keyPropertyName="${field.propertyName}"/>
     </#if>
-
     <#if field.comment!?length gt 0>
         <#if swagger2>
     @ApiModelProperty("${field.comment}")
@@ -86,6 +88,9 @@ public class ${entity} implements Serializable {
 <#-- 逻辑删除注解 -->
     <#if (logicDeleteFieldName!"") == field.name>
     @TableLogic
+    </#if>
+    <#if jsonIgnoreFields?? && jsonIgnoreFields?seq_contains(field.name)>
+    @JsonIgnore
     </#if>
     private ${field.propertyType} ${field.propertyName};
 </#list>

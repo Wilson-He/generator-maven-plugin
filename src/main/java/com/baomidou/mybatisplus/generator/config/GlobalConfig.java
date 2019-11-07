@@ -116,11 +116,12 @@ public class GlobalConfig {
             return this;
         }
         return compute(templates.getEntityPattern() != null, GlobalConfig::setEntityName, templates.getEntityPattern())
+                .compute(templates.getConstantPattern() != null, GlobalConfig::setConstantName, templates.getConstantPattern())
                 .compute(templates.getXmlPattern() != null, GlobalConfig::setXmlName, templates.getXmlPattern())
                 .compute(templates.getDaoPattern() != null, GlobalConfig::setMapperName, templates.getDaoPattern())
                 .compute(templates.getServicePattern() != null, GlobalConfig::setServiceName, templates.getServicePattern())
                 .compute(templates.getServiceImplPattern() != null, GlobalConfig::setServiceImplName, templates.getServiceImplPattern())
-                .compute(templates.getConstantPattern() != null, GlobalConfig::setControllerName, templates.getControllerPattern());
+                .compute(templates.getControllerPattern() != null, GlobalConfig::setControllerName, templates.getControllerPattern());
     }
 
     private GlobalConfig compute(boolean isExecute, BiFunction<GlobalConfig, String, GlobalConfig> setFunc, String val) {

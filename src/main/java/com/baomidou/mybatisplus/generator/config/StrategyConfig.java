@@ -151,6 +151,10 @@ public class StrategyConfig {
      */
     private boolean entityTableFieldAnnotationEnable = false;
     /**
+     * 指定字段上添加jackson的@JsonIgnore字段
+     */
+    private List<String> jsonIgnoreFields;
+    /**
      * 乐观锁属性名称
      */
     private String versionFieldName;
