@@ -36,7 +36,10 @@ public class GenerateProcessorMojo extends AbstractMojo {
     private String basePackage;
     /**
      * 数据库相关配置[url,username,password,driverType,bitToInteger,commentPattern,excludeConstantFields]<br>
-     * <li>driverType - 数据库驱动类型,取值范围:[MYSQL,ORACLE,PROGRE_SQL],默认MYSQL</li>
+     * <li>url: 必须</li>
+     * <li>username: 必须</li>
+     * <li>password: 必须</li>
+     * <li>driverType - 数据库驱动类型,取值范围:[MYSQL,ORACLE,PROGRE_SQL],不配置则默认MYSQL</li>
      * <li>bitToInteger - 是否将数据库bit类型逆向生成为integer类型,默认true</li>
      * <li>commentPattern - 注释样式,如: key:value:comment  key:value-comment</li>
      * <li>excludeConstantFields - 不生成指定字段常量类,如: is_delete,state</li>
@@ -123,7 +126,7 @@ public class GenerateProcessorMojo extends AbstractMojo {
     @Parameter
     private String[] exclusions;
     /**
-     * 表名前缀,如tb_user不生成tb_前缀则设为tb_
+     * 表名前缀,如tb_user不生成tb_前缀则设为tb_,非必须
      */
     @Parameter
     private String[] tablePrefix;
