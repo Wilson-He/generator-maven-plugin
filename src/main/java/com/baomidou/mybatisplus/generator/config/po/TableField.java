@@ -53,10 +53,14 @@ public class TableField {
     private String propertyName;
     private IColumnType columnType;
     private String comment;
+    private String excludeKeyComment;
     /**
      * 字段枚举值
      */
     private List<TableFieldComment> fieldEnums;
+    /**
+     * 常量配置,如 ENABLE:1-可用,DISABLE:0-禁用
+     */
     private String fieldEnumsString;
     private String fill;
     /**
@@ -75,6 +79,9 @@ public class TableField {
     private static final String COMMENT_REGEX = COMMENT_REGEX_PURE + "|" + COMMENT_REGEX_SUFFIX;
 
     public boolean isConstantField() {
+        if (ConstantCommentConfig.getInstance() == null) {
+            return false;
+        }
         if (null == comment || !comment.matches(ConstantCommentConfig.getInstance().getRegexp())) {
             return false;
         }
@@ -98,11 +105,15 @@ public class TableField {
         try {
             // key1:val1:comment1,key2:val2:comment2  key1:comment1 key2:comment2 key3:comment3
             fieldEnums = commentConfig.fetchCommentList(fieldEnumsString, clazz);
+            excludeKeyComment = comment.substring(0, comment.indexOf("(") + 1) +
+                    fieldEnums.stream()
+                            .map(fieldEnum -> fieldEnum.getValue() + "-" + fieldEnum.getComment())
+                            .reduce((a, b) -> a + "," + b)
+                            .orElse("") + ")";
         } catch (Exception e) {
             String exceptionMsg = "%s.%s常量范式错误,请检查范式: %s";
             System.err.println(String.format(exceptionMsg, table, name, fieldEnumsString));
             log.error(String.format(exceptionMsg, table, name, fieldEnumsString), e);
-
         }
     }
 

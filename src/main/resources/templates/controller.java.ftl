@@ -1,7 +1,10 @@
 package ${package.Controller};
 
-
+import ${package.Service}.${table.serviceName};
+<#if swagger2>
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+</#if>
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +17,11 @@ import org.springframework.stereotype.Controller;
 import ${superControllerClassPackage};
 </#if>
 
+import javax.annotation.Resource;
+
 /**
  * <p>
- * <#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if></#if>
+ * <#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if><#else >${table.comment}控制器</#if>
  * </p>
  *
  * @author ${author}
@@ -24,6 +29,7 @@ import ${superControllerClassPackage};
  */
 @RestController
 @RequestMapping("<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>")
+<#if swagger2>@Api(tags = "<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if><#else >${table.comment}控制器</#if>")</#if>
 <#if kotlin>
 public class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
 <#else>
@@ -32,28 +38,43 @@ public class ${table.controllerName} extends ${superControllerClass} {
     <#else>
 public class ${table.controllerName} {
     </#if>
+    @Resource
+    private ${table.serviceName} ${table.serviceName?uncap_first};
+
     @PostMapping("/")
     public Object add(@Validated @RequestBody Object vo) {
         return null;
     }
 
     @GetMapping("/")
+    <#if swagger2>
+    @ApiOperation("根据id查询<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if></#if>")
+    </#if>
     public Object get(@ApiParam(name = "id", value = "<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","")}<#else>${table.comment}</#if></#if>id") @RequestParam String id) {
         return null;
     }
 
     @GetMapping("/page")
+    <#if swagger2>
+    @ApiOperation("分页查询<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if></#if>")
+    </#if>
     public Object page(@ApiParam(name = "page", value = "页码", defaultValue = "1") @RequestParam(defaultValue = "1") Integer page,
     @ApiParam(name = "size", value = "每页返回数", defaultValue = "15") @RequestParam(defaultValue = "15") Integer size) {
         return null;
     }
 
     @PutMapping("/")
+    <#if swagger2>
+    @ApiOperation("根据id更新<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if></#if>")
+    </#if>
     public Object update(@Validated @RequestBody Object vo) {
         return null;
     }
 
     @DeleteMapping("/")
+    <#if swagger2>
+    @ApiOperation("根据id删除<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if></#if>")
+    </#if>
     public Object delete(@ApiParam(name = "id", value = "<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","")}<#else>${table.comment}</#if></#if>id") @RequestParam String id) {
         return null;
     }

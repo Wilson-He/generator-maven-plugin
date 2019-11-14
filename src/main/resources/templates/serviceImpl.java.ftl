@@ -24,10 +24,26 @@ public class ${table.serviceImplName} implements ${table.serviceName}{
     @Resource
     private ${table.mapperName} ${table.mapperName?uncap_first};
 
-    <#if javaIdType??>
+    <#if crudIdType??>
     @Override
-    public ${entity} findById(${javaIdType} id){
+    public ${crudIdType} insert(${entity} ${entity?uncap_first}){
+        ${table.mapperName?uncap_first}.insert(${entity?uncap_first});
+        return ${entity?uncap_first}.getId();
+    }
+
+    @Override
+    public boolean updateById(${entity} ${entity?uncap_first}){
+        return ${table.mapperName?uncap_first}.updateById(${entity?uncap_first}) > 0;
+    }
+
+    @Override
+    public ${entity} findById(${crudIdType} id){
         return ${table.mapperName?uncap_first}.selectById(id);
+    }
+
+    @Override
+    public boolean deleteById(${crudIdType} id){
+        return ${table.mapperName?uncap_first}.deleteById(id) > 0;
     }
     </#if>
 }

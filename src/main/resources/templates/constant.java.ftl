@@ -24,6 +24,7 @@ public interface ${entity}Constant {
          */
         ${field.columnType.type} ${fieldEnum.key} = ${fieldEnum.value};
     </#list>
+        String COMMENT = "${field.excludeKeyComment}";
     <#if field.fieldEnums?size lt 6>
         Map<${field.columnType.type}, String> MAP = ImmutableMap.of(
         <#list field.fieldEnums as fieldEnum>

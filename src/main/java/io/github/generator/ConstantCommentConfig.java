@@ -107,7 +107,7 @@ public class ConstantCommentConfig {
             }
         }
         for (String comment : comments) {
-            // ,key:comment,  ,key:value:comment,
+            // key:comment  key:value:comment
             comment = String.format(COMMENT_FORMAT_PATTERN, comment);
             String value;
             if (justKeyComment) {

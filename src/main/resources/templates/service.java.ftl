@@ -13,6 +13,14 @@ import ${package.Entity}.${entity};
 interface ${table.serviceName} : ${superServiceClass}<${entity}>
 <#else>
 public interface ${table.serviceName} {
-    <#if javaIdType??>${entity} findById(${javaIdType} id);</#if>
+    <#if crudIdType??>
+    ${crudIdType} insert(${entity} ${entity?uncap_first});
+
+    boolean updateById(${entity} ${entity?uncap_first});
+
+    ${entity} findById(${crudIdType} id);
+
+    boolean deleteById(${crudIdType} id);
+    </#if>
 }
 </#if>

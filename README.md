@@ -38,7 +38,7 @@
     - ID_WORKER:全局唯一ID(只有当插入对象ID为空，才自动填充)
     - UUID:全局唯一ID(只有当插入对象ID为空，才自动填充)
     - ID_WORKER_STR:字符串全局唯一ID(idWorker的字符串表示,只有当插入对象ID为空，才自动填充)
-  - javaIdType,设置后生成的service将自动生成对应的findById方法
+  - crudIdType,设置后生成的service将自动生成对应的crud方法
   - dataSource: 数据库配置[**必填项**]
     - url
     - username
