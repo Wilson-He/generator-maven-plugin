@@ -3,14 +3,19 @@ package ${package.Entity};
 <#list table.importPackages as pkg>
 import ${pkg};
 </#list>
+
 <#if swagger2>
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 </#if>
-<#if table.hasJsonIgnore>
+<#if table.hasJsonIgnore || table.hasEnums>
 import com.fasterxml.jackson.annotation.JsonIgnore;
 </#if>
-<#if table.hasEnums>import ${package.Constant}.${entity}Constant;</#if>
+<#if table.hasEnums>import ${package.Constant}.${entity}Constant;
+
+import java.util.Objects;
+
+</#if>
 <#if entityLombokModel>
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -154,6 +159,11 @@ public class ${entity} implements Serializable {
     <#if field.constantField>
     public Object get${field.propertyName?cap_first}Dict() {
         return ${entity}Constant.${field.propertyName?cap_first}.MAP.get(this.${field.propertyName});
+    }
+
+    @JsonIgnore
+    public boolean is${field.propertyName?cap_first}Equals(${field.propertyType} ${field.propertyName}) {
+        return Objects.equals(this.${field.propertyName}, ${field.propertyName});
     }
 
     </#if>

@@ -65,7 +65,7 @@ public class TableInfo {
     }
 
     public boolean isHasJsonIgnore() {
-        return  Optional.ofNullable(strategyConfig.getJsonIgnoreFields())
+        return Optional.ofNullable(strategyConfig.getJsonIgnoreFields())
                 .map(Collection::stream)
                 .map(stream -> stream.anyMatch(ignoreField -> getFieldNames().contains(ignoreField)))
                 .orElse(false);
