@@ -13,6 +13,7 @@
                   <username>root</username>
                   <password>tiger</password>
                   <driverType>MYSQL</driverType>
+                  <commentPattern>key:value-comment</commentPattern>
               </dataSource>
           </configuration>
           <executions>
