@@ -37,6 +37,9 @@ public class TemplateConfig {
     private Boolean excludeService = false;
     private Boolean excludeServiceImpl = false;
     private Boolean excludeController = true;
+    /**
+     * 自定义扩展模板配置
+     */
     private List<ExtendTemplateConfig> customs = new ArrayList<>();
     private File resourcesPath;
 

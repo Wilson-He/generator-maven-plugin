@@ -56,6 +56,27 @@ public class GenerateProcessorMojo extends AbstractMojo {
      * <li>excludeEntity: 不生成entity, 默认false</li>
      * <li>excludeConstant, excludeDao, excludeXml, excludeService, excludeServiceImpl类同excludeEntity</li>
      * <li>excludeController: 默认true, 不生成controller</li>
+     * <li>customs: 自定义扩展模板配置列表,默认null
+     *   <ul>
+     *     <li>layerName: 所属层名,首字母大写,将作为ftl模板文件所在包的路径变量,如：Manager</li>
+     *     <li>path: 模板文件在resources下的相对路径</li>
+     *     <li>subPackage: 所在子包，如: manager, 当layManager=Manager时则ftl文件可通过${package.Manager}获取包路径xxx.xxx.xxx.manager</li>
+     *   </ul>
+     *   完整例子：<br><pre>
+     *   &lt;templates>
+     *       &lt;!--    生成controller    -->
+     *      &lt;excludeController>false&lt;/excludeController>
+     *      &lt;customs>
+     *        &lt;param>
+     *            &lt;!-- 根据resources/templates/manager.ftl模板在{basePackage}.manager包下生成实体对应的Manager -->
+     *            &lt;path>/templates/manager.ftl&lt;/path>
+     *            &lt;subPackage>manager&lt;/subPackage>
+     *            &lt;layerName>Manager&lt;/layerName>
+     *        &lt;/param>
+     *      &lt;/customs>&lt;
+     *   &lt;/templates>
+     *   <pre>
+     * </li>
      */
     @Parameter
     private TemplateConfig templates;
