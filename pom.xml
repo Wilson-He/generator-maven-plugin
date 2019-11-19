@@ -4,14 +4,14 @@
     <groupId>io.github.wilson-he</groupId>
     <artifactId>generator-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>0.1.5</version>
+    <version>0.2.0</version>
     <name>generator-maven-plugin Maven Mojo</name>
     <url>https://github.com/Wilson-He/generator-maven-plugin</url>
     <description>freemarker模板生成器插件</description>
     <scm>
         <connection>git@github.com:Wilson-He/generator-maven-plugin.git</connection>
         <url>https://github.com/Wilson-He/generator-maven-plugin</url>
-        <tag>generator-maven-plugin-0.1.5</tag>
+        <tag>generator-maven-plugin-0.2.0</tag>
     </scm>
     <licenses>
         <license>
@@ -32,6 +32,7 @@
             <maven.compiler.source>1.8</maven.compiler.source>
             <maven.compiler.target>1.8</maven.compiler.target>
             <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            <ojdbc.version>19.3.0.0</ojdbc.version>
     </properties>
 
     <dependencies>
@@ -119,9 +120,9 @@
             <version>42.2.6</version>
         </dependency>
         <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
-            <version>11.2.0.3</version>
+            <groupId>com.oracle.ojdbc</groupId>
+            <artifactId>ojdbc10</artifactId>
+            <version>${ojdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
