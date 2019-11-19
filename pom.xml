@@ -121,7 +121,7 @@
         </dependency>
         <dependency>
             <groupId>com.oracle.ojdbc</groupId>
-            <artifactId>ojdbc10</artifactId>
+            <artifactId>ojdbc8</artifactId>
             <version>${ojdbc.version}</version>
         </dependency>
         <dependency>
