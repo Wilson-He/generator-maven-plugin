@@ -12,7 +12,6 @@
                   <url><![CDATA[jdbc:mysql://localhost:3306/wilson?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false]]></url>
                   <username>root</username>
                   <password>tiger</password>
-                  <commentPattern>key:value-comment</commentPattern>
               </dataSource>
           </configuration>
       </plugin>
@@ -115,6 +114,7 @@
                       <username>root</username>
                       <password>tiger</password>
                       <driverType>MYSQL</driverType>
+                      <commentPattern>key:value-comment</commentPattern>
                   </dataSource>
                   <exclusions>
                       <!-- 不生成表名含relation字符串的所有文件,默认空 -->
