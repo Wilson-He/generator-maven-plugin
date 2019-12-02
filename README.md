@@ -8,6 +8,8 @@
           <version>LATEST</version>
           <configuration>
               <basePackage>io.github.test</basePackage>
+              <!-- 生成前是否清空target/generate-sources目录 -->
+              <isCleanBefore>true</isCleanBefore>
               <dataSource>
                   <url><![CDATA[jdbc:mysql://localhost:3306/wilson?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false]]></url>
                   <username>root</username>
