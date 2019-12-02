@@ -28,8 +28,8 @@ import javax.annotation.Resource;
  * @since ${date}
  */
 @RestController
-@RequestMapping("<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>")
-<#if swagger2>@Api(tags = "<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if><#else >${table.comment}控制器</#if>")</#if>
+@RequestMapping("<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>")<#if swagger2>
+ @Api(tags = "<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if><#else >${table.comment}控制器</#if>")</#if>
 <#if kotlin>
 public class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
 <#else>
@@ -50,7 +50,7 @@ public class ${table.controllerName} {
     <#if swagger2>
     @ApiOperation("根据id查询<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if></#if>")
     </#if>
-    public Object get(@ApiParam(name = "id", value = "<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","")}<#else>${table.comment}</#if></#if>id") @RequestParam String id) {
+    public Object get(<#if swagger2>@ApiParam(name = "id", value = "<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","")}<#else>${table.comment}</#if></#if>id") </#if>@RequestParam String id) {
         return null;
     }
 
@@ -58,8 +58,8 @@ public class ${table.controllerName} {
     <#if swagger2>
     @ApiOperation("分页查询<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if></#if>")
     </#if>
-    public Object page(@ApiParam(name = "page", value = "页码", defaultValue = "1") @RequestParam(defaultValue = "1") Integer page,
-    @ApiParam(name = "size", value = "每页返回数", defaultValue = "15") @RequestParam(defaultValue = "15") Integer size) {
+    public Object page(<#if swagger2>@ApiParam(name = "page", value = "页码", defaultValue = "1") </#if>@RequestParam(defaultValue = "1") Integer page,
+                       <#if swagger2>@ApiParam(name = "size", value = "每页返回数", defaultValue = "15") </#if>@RequestParam(defaultValue = "15") Integer size) {
         return null;
     }
 
@@ -75,7 +75,7 @@ public class ${table.controllerName} {
     <#if swagger2>
     @ApiOperation("根据id删除<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","控制器")}<#else>${table.comment}</#if></#if>")
     </#if>
-    public Object delete(@ApiParam(name = "id", value = "<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","")}<#else>${table.comment}</#if></#if>id") @RequestParam String id) {
+    public Object delete(<#if swagger2>@ApiParam(name = "id", value = "<#if table.comment??><#if table.comment?ends_with("表")>${table.comment?replace("表","")}<#else>${table.comment}</#if></#if>id") </#if>@RequestParam String id) {
         return null;
     }
 }

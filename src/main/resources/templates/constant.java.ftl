@@ -15,7 +15,7 @@ public interface ${entity}Constant {
 <#list table.fields as field>
     <#if field.constantField>
     /**
-     * ${field.comment}
+     * ${field.excludeKeyComment}
      */
     interface ${field.propertyName?capFirst} {
     <#list field.fieldEnums as fieldEnum>

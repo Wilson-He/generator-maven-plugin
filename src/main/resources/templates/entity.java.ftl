@@ -59,10 +59,10 @@ public class ${entity} implements Serializable {
     </#if>
     <#if field.comment!?length gt 0>
         <#if swagger2>
-    @ApiModelProperty("${field.comment}")
+    @ApiModelProperty("<#if field.excludeKeyComment??>${field.excludeKeyComment}<#else>${field.comment}</#if>")
         <#else>
     /**
-     * ${field.comment}
+     * <#if field.excludeKeyComment??>${field.excludeKeyComment},{@link ${package.Constant}.${entity}Constant}<#else>${field.comment}</#if>
      */
         </#if>
     </#if>

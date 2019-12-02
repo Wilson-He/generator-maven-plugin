@@ -12,17 +12,9 @@
                   <url><![CDATA[jdbc:mysql://localhost:3306/wilson?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false]]></url>
                   <username>root</username>
                   <password>tiger</password>
-                  <driverType>MYSQL</driverType>
                   <commentPattern>key:value-comment</commentPattern>
               </dataSource>
           </configuration>
-          <executions>
-              <execution>
-                  <goals>
-                      <goal>generate</goal>
-                  </goals>
-              </execution>
-          </executions>
       </plugin>
 
 - ## 目前支持的配置项
@@ -31,7 +23,7 @@
   - isCleanBefore(boolean): 文件生成前是否清空当前模块下的target目录,默认false
   - useSwagger(boolean):生成文件是否带swagger注解,默认false
   - superEntityClass:entity父类，完整包路径.类名
-  - author:模板author值,默认空
+  - author:文件author值,默认空
   - idType:String类型,用于设置实体id注解IdType,默认空-不生成mybatis-plus id注解,可取值如下：
     - AUTO:数据库ID自增
     - NONE:该类型为未设置主键类型
@@ -39,12 +31,12 @@
     - ID_WORKER:全局唯一ID(只有当插入对象ID为空，才自动填充)
     - UUID:全局唯一ID(只有当插入对象ID为空，才自动填充)
     - ID_WORKER_STR:字符串全局唯一ID(idWorker的字符串表示,只有当插入对象ID为空，才自动填充)
-  - crudIdType,设置后生成的service将自动生成对应的crud方法
+  - crudIdType:实体id类型，如Long
   - dataSource: 数据库配置[**必填项**]
     - url
     - username
     - password
-    - driverType:数据库驱动类型(MYSQL,ORACLE,POSTGRE_SQL)
+    - driverType:数据库驱动类型,默认MYSQL(MYSQL,ORACLE,POSTGRE_SQL)
     - excludeConstantFields: 不生成指定字段常量类,如: is_delete,state
     - commentPattern: db字段注释中括号内的常量模板样式配置,key为常量的java变量名,value为变量名对应的常量值,comment为常量值注释,key、value、comment之间有且只有一个任意分隔符(逗号","除外),
     若db字段注释只需key、comment(key=value)但仍需生成常量类,则key、comment间的分割符需为commentPattern中key、value、comment之间的分隔符之一，用例如下：
