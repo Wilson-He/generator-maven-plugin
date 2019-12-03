@@ -11,7 +11,7 @@
     <scm>
         <connection>git@github.com:Wilson-He/generator-maven-plugin.git</connection>
         <url>https://github.com/Wilson-He/generator-maven-plugin</url>
-        <tag>generator-maven-plugin-0.2.0</tag>
+        <tag>generator-maven-plugin-0.2.1</tag>
     </scm>
     <licenses>
         <license>

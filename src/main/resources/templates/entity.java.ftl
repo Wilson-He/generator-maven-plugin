@@ -161,7 +161,9 @@ public class ${entity} implements Serializable {
         return ${entity}Constant.${field.propertyName?cap_first}.MAP.get(this.${field.propertyName});
     }
 
-    @JsonIgnore
+    /**
+     * @param ${field.propertyName} {@link ${package.Constant}.${entity}Constant.${field.propertyName?cap_first}}
+     */
     public boolean is${field.propertyName?cap_first}Equals(${field.propertyType} ${field.propertyName}) {
         return Objects.equals(this.${field.propertyName}, ${field.propertyName});
     }
