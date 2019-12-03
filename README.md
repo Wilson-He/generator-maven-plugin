@@ -147,7 +147,7 @@
                   </execution>
               </executions>
           </plugin>
-     - /src/resources/Manager.ftl
+     - /src/resources/templates/manager.ftl
 
            package ${package.Manager};
        
