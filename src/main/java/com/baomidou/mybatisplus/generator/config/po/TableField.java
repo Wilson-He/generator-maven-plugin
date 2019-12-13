@@ -105,11 +105,11 @@ public class TableField {
         try {
             // key1:val1:comment1,key2:val2:comment2  key1:comment1 key2:comment2 key3:comment3
             fieldEnums = commentConfig.fetchCommentList(fieldEnumsString, clazz);
-            excludeKeyComment = comment.substring(0, comment.indexOf("(") + 1) +
+            excludeKeyComment = (comment.substring(0, comment.indexOf("(") + 1) +
                     fieldEnums.stream()
                             .map(fieldEnum -> fieldEnum.getValue() + "-" + fieldEnum.getComment())
                             .reduce((a, b) -> a + "," + b)
-                            .orElse("") + ")";
+                            .orElse("") + ")").replace("\"", "");
         } catch (Exception e) {
             String exceptionMsg = "%s.%s常量范式错误,请检查范式: %s";
             System.err.println(String.format(exceptionMsg, table, name, fieldEnumsString));
