@@ -41,7 +41,7 @@ public class GenerateProcessorMojo extends AbstractMojo {
      * <li>password: 必须</li>
      * <li>driverType - 数据库驱动类型,取值范围:[MYSQL,ORACLE,PROGRE_SQL],不配置则默认MYSQL</li>
      * <li>bitToInteger - 是否将数据库bit类型逆向生成为integer类型,默认true</li>
-     * <li>commentPattern - 注释样式,如: key:value:comment  key:value-comment</li>
+     * <li>commentPattern - 注释样式,不配置则不生成constant,如: key:value:comment  key:value-comment</li>
      * <li>excludeConstantFields - 不生成指定字段常量类,如: is_delete,state</li>
      */
     @Parameter
