@@ -371,18 +371,22 @@ public class ConfigBuilder {
      * 获取所有的数据库表信息
      */
     private List<TableInfo> getTablesInfo(StrategyConfig config) {
-        boolean isInclude = (null != config.getInclude() && config.getInclude().length > 0);
-        boolean isExclude = (null != config.getExclude() && config.getExclude().length > 0);
+        boolean isInclude = (null != config.getInclusions() && config.getInclusions().length > 0);
+        boolean isExclude = (null != config.getExclusions() && config.getExclusions().length > 0);
         if (isInclude && isExclude) {
             throw new RuntimeException("<strategy> 标签中 <include> 与 <exclude> 只能配置一项！");
         }
+        String includePatterns = isInclude ? Arrays.stream(config.getInclusions())
+                .reduce((a, b) -> a + "|" + b)
+                .orElse("") : "";
+        String excludePatterns = isExclude ? Arrays.stream(config.getExclusions())
+                .reduce((a, b) -> a + "|" + b)
+                .orElse("") : "";
         //所有的表信息
         List<TableInfo> tableList = new ArrayList<>();
-
         //需要反向生成或排除的表信息
         List<TableInfo> includeTableList = new ArrayList<>();
         List<TableInfo> excludeTableList = new ArrayList<>();
-
         //不存在的表名
         try {
             String tablesSql = dbQuery.tablesSql();
@@ -416,13 +420,13 @@ public class ConfigBuilder {
                 if (isInclude) {
                     StringBuilder sb = new StringBuilder(tablesSql);
                     sb.append(" AND ").append(dbQuery.tableName()).append(" IN (");
-                    Arrays.stream(config.getInclude()).forEach(tbName -> sb.append(StringPool.SINGLE_QUOTE).append(tbName.toUpperCase()).append("',"));
+                    Arrays.stream(config.getInclusions()).forEach(tbName -> sb.append(StringPool.SINGLE_QUOTE).append(tbName.toUpperCase()).append("',"));
                     sb.replace(sb.length() - 1, sb.length(), StringPool.RIGHT_BRACKET);
                     tablesSql = sb.toString();
                 } else if (isExclude) {
                     StringBuilder sb = new StringBuilder(tablesSql);
                     sb.append(" AND ").append(dbQuery.tableName()).append(" NOT IN (");
-                    Arrays.stream(config.getExclude()).forEach(tbname -> sb.append(StringPool.SINGLE_QUOTE).append(tbname.toUpperCase()).append("',"));
+                    Arrays.stream(config.getExclusions()).forEach(tbname -> sb.append(StringPool.SINGLE_QUOTE).append(tbname.toUpperCase()).append("',"));
                     sb.replace(sb.length() - 1, sb.length(), StringPool.RIGHT_BRACKET);
                     tablesSql = sb.toString();
                 }
@@ -441,9 +445,9 @@ public class ConfigBuilder {
                         tableInfo = new TableInfo();
                         tableInfo.setName(tableName);
                         tableInfo.setComment(tableComment);
-                        if (isInclude && org.apache.commons.lang3.StringUtils.containsAny(tableName, config.getInclude())) {
+                        if (isInclude && StringUtils.matches(includePatterns, tableName)) {
                             includeTableList.add(tableInfo);
-                        } else if (isExclude && org.apache.commons.lang3.StringUtils.containsAny(tableName, config.getExclude())) {
+                        } else if (isExclude && StringUtils.matches(excludePatterns, tableName)) {
                             excludeTableList.add(tableInfo);
                         }
                         tableList.add(tableInfo);
@@ -460,7 +464,7 @@ public class ConfigBuilder {
             if (!isInclude && !isExclude) {
                 includeTableList = tableList;
             }
-            // 性能优化，只处理需执行表字段 github issues/219
+            // 性能优化，只处理需执行表字段
             includeTableList.forEach(ti -> convertTableFields(ti, config));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -553,7 +557,7 @@ public class ConfigBuilder {
                     } else {
                         field.setPropertyName(strategyConfig, processName(field.getName(), config.getNaming()));
                     }
-                    field.setColumnType(dataSourceConfig.getTypeConvert().processTypeConvert(globalConfig, field.getType(),dataSourceConfig.isBitToInteger()));
+                    field.setColumnType(dataSourceConfig.getTypeConvert().processTypeConvert(globalConfig, field.getType(), dataSourceConfig.isBitToInteger()));
                     field.setComment(results.getString(dbQuery.fieldComment()));
                     if (strategyConfig.includeSuperEntityColumns(field.getName())) {
                         // 跳过公共字段

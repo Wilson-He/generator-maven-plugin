@@ -57,12 +57,12 @@ public class GenerateProcessorMojo extends AbstractMojo {
      * <li>excludeConstant, excludeDao, excludeXml, excludeService, excludeServiceImpl类同excludeEntity</li>
      * <li>excludeController: 默认true, 不生成controller</li>
      * <li>customs: 自定义扩展模板配置列表,默认null
-     *   <ul>
-     *     <li>layerName: 所属层名,首字母大写,将作为ftl模板文件所在包的路径变量,如：Manager</li>
-     *     <li>path: 模板文件在resources下的相对路径</li>
-     *     <li>subPackage: 所在子包，如: manager, 当layManager=Manager时则ftl文件可通过${package.Manager}获取包路径xxx.xxx.xxx.manager</li>
-     *   </ul>
-     *   完整例子：<br><pre>
+     * <ul>
+     * <li>layerName: 所属层名,首字母大写,将作为ftl模板文件所在包的路径变量,如：Manager</li>
+     * <li>path: 模板文件在resources下的相对路径</li>
+     * <li>subPackage: 所在子包，如: manager, 当layManager=Manager时则ftl文件可通过${package.Manager}获取包路径xxx.xxx.xxx.manager</li>
+     * </ul>
+     * 完整例子：<br><pre>
      *   &lt;templates>
      *       &lt;!--    生成controller    -->
      *      &lt;excludeController>false&lt;/excludeController>
@@ -117,20 +117,49 @@ public class GenerateProcessorMojo extends AbstractMojo {
     @Parameter
     private String superEntityClass;
     /**
-     * 根据关键字排除生成表名含关键字的Service、Controller,如:relation,admin 则不生成表名含relation或admin的Service与Controller
+     * 数组类型，根据关键字排除生成表名含关键字的Service、Controller,如:relation,admin 则不生成表名含relation或admin的Service与Controller,两种配置模式：<br>
+     * <li>逗号分隔: &lt;upstreamExclusions&gt;user\w+,product\w+&lt;/upstreamExclusions&gt;<br></li>
+     * <li>子标签配置：<pre>
+     *  &lt;upstreamExclusions>
+     *        &lt;upstreamExclusion>user\w+&lt;/upstreamExclusion>
+     *        &lt;upstreamExclusion>product\w+&lt;/upstreamExclusion>
+     *  &lt;/upstreamExclusions></pre>
      */
     @Parameter
     private String[] upstreamExclusions;
     /**
-     * 根据关键字生成表名含关键字的Service、Controller,如:relation,admin 则只生成表名含relation或admin的Service与Controller
+     * 数组类型，根据关键字生成表名含关键字的Service、Controller,如:relation,admin 则只生成表名含relation或admin的Service与Controller,两种配置模式：<br>
+     * <li>逗号分隔: &lt;upstreamInclusions&gt;user\w+,product\w+&lt;/upstreamInclusions&gt;<br></li>
+     * <li>子标签配置：<pre>
+     *  &lt;upstreamInclusions>
+     *        &lt;upstreamInclusion>user\w+&lt;/upstreamInclusion>
+     *        &lt;upstreamInclusion>product\w+&lt;/upstreamInclusion>
+     *  &lt;/upstreamInclusions></pre>
      */
     @Parameter
     private String[] upstreamInclusions;
     /**
-     * 生成含指定正则的文件
+     * 数组类型，生成含指定正则的文件,两种配置模式：<br>
+     * <li>逗号分隔: &lt;inclusions&gt;user\w+,product\w+&lt;/inclusions&gt;<br></li>
+     * <li>子标签配置：<pre>
+     *  &lt;inclusions>
+     *        &lt;inclusion>user\w+&lt;/inclusion>
+     *        &lt;inclusion>product\w+&lt;/inclusion>
+     *  &lt;/inclusions></pre>
      */
     @Parameter
     private String[] inclusions;
+    /**
+     * 数组类型，不生成含指定正则的文件,两种配置模式：<br>
+     * <li>逗号分隔: &lt;exclusion&gt;user\w+,product\w+&lt;/exclusion&gt;<br></li>
+     * <li>子标签配置：<pre>
+     *  &lt;exclusions>
+     *        &lt;exclusion>user\w+&lt;/exclusion>
+     *        &lt;exclusion>product\w+&lt;/exclusion>
+     *  &lt;/exclusions></pre>
+     */
+    @Parameter
+    private String[] exclusions;
     /**
      * 生成前是否清空当前模块的target目录,默认false
      */
@@ -142,12 +171,7 @@ public class GenerateProcessorMojo extends AbstractMojo {
     @Parameter(defaultValue = "false")
     private Boolean useSwagger;
     /**
-     * 不生成含指定正则的文件
-     */
-    @Parameter
-    private String[] exclusions;
-    /**
-     * 表名前缀,如tb_user不生成tb_前缀则设为tb_,非必须
+     * 数组类型,表名前缀,如tb_user不生成tb_前缀则设为tb_,非必须,多个则用逗号分","隔
      */
     @Parameter
     private String[] tablePrefix;
@@ -177,14 +201,13 @@ public class GenerateProcessorMojo extends AbstractMojo {
                     .backGenerator()
                     // 策略配置
                     .getStrategy()
-                    .setInclude(inclusions)
-                    .setJsonIgnoreFields(jsonIgnores == null ? null : Lists.newArrayList(jsonIgnores.split(",")))
-                    .setExclude(exclusions)
+                    .setInclusions(inclusions)
+                    .setExclusions(exclusions)
                     .setTablePrefix(tablePrefix)
                     .includeKeywords(upstreamInclusions)
                     .excludeKeywords(upstreamExclusions)
+                    .setJsonIgnoreFields(jsonIgnores == null ? null : Lists.newArrayList(jsonIgnores.split(",")))
                     .setSuperEntityClass(superEntityClass)
-                    .setInclude()
                     .setLogicDeleteFieldName(logicDeleteFieldName)
                     .backGenerator()
                     // 模板路径配置

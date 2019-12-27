@@ -29,7 +29,9 @@ import lombok.experimental.Accessors;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 策略配置项
@@ -101,12 +103,12 @@ public class StrategyConfig {
      * 需要包含的表名，允许正则表达式（与exclude二选一配置）
      */
     @Setter(AccessLevel.NONE)
-    private String[] include = null;
+    private String[] inclusions = null;
     /**
      * 需要排除的表名，允许正则表达式
      */
     @Setter(AccessLevel.NONE)
-    private String[] exclude = null;
+    private String[] exclusions = null;
     /**
      * 实体是否生成 serialVersionUID
      */
@@ -168,23 +170,31 @@ public class StrategyConfig {
     private List<TableFill> tableFillList = null;
 
     /**
-     * 根据关键字不生成指定关键字的Service、Controller,
+     * 根据正则关键字不生成指定关键字的Service、Controller,
      */
-    private String[] excludeKeywords;
+    private String excludeKeywordsPattern;
     /**
-     * 根据关键字生成指定关键字的Service、Controller,
+     * 根据正则关键字生成指定关键字的Service、Controller
      */
-    private String[] includeKeywords;
+    private String includeKeywordsPattern;
 
     private AutoGenerator autoGenerator;
 
     public StrategyConfig includeKeywords(String... keywords) {
-        this.includeKeywords = keywords;
+        this.includeKeywordsPattern = Optional.ofNullable(keywords)
+                .map(patterns -> Stream.of(keywords)
+                        .reduce((a, b) -> a + "|" + b)
+                        .orElse(null))
+                .orElse(null);
         return this;
     }
 
     public StrategyConfig excludeKeywords(String... keywords) {
-        this.excludeKeywords = keywords;
+        this.excludeKeywordsPattern = Optional.ofNullable(keywords)
+                .map(patterns -> Stream.of(keywords)
+                        .reduce((a, b) -> a + "|" + b)
+                        .orElse(null))
+                .orElse(null);
         return this;
     }
 
@@ -251,13 +261,13 @@ public class StrategyConfig {
         return this;
     }
 
-    public StrategyConfig setInclude(String... include) {
-        this.include = include;
+    public StrategyConfig setInclusions(String... inclusions) {
+        this.inclusions = inclusions;
         return this;
     }
 
-    public StrategyConfig setExclude(String... exclude) {
-        this.exclude = exclude;
+    public StrategyConfig setExclusions(String... exclusions) {
+        this.exclusions = exclusions;
         return this;
     }
 

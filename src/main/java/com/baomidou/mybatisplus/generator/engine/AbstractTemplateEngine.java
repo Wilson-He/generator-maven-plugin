@@ -15,7 +15,6 @@
  */
 package com.baomidou.mybatisplus.generator.engine;
 
-import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -76,33 +75,33 @@ public abstract class AbstractTemplateEngine {
     public AbstractTemplateEngine batchOutput() {
         try {
             List<TableInfo> tableInfoList = getConfigBuilder().getTableInfoList();
+            String excludeKeywords = configBuilder.getStrategyConfig().getExcludeKeywordsPattern();
+            String includeKeywords = configBuilder.getStrategyConfig().getIncludeKeywordsPattern();
+            Map<String, String> pathInfo = getConfigBuilder().getPathInfo();
+            TemplatePaths template = getConfigBuilder().getTemplate();
+            InjectionConfig injectionConfig = getConfigBuilder().getInjectionConfig();
+            final boolean hasInjectionConfig = injectionConfig != null;
+            List<FileOutConfig> focList = null;
+            if (hasInjectionConfig) {
+                injectionConfig.initMap();
+                focList = injectionConfig.getFileOutConfigList();
+            }
             for (TableInfo tableInfo : tableInfoList) {
                 Map<String, Object> objectMap = getObjectMap(tableInfo);
-                Map<String, String> pathInfo = getConfigBuilder().getPathInfo();
-                TemplatePaths template = getConfigBuilder().getTemplate();
+                objectMap.put("cfg", injectionConfig != null ? injectionConfig.getMap() : null);
                 // 自定义内容
-                InjectionConfig injectionConfig = getConfigBuilder().getInjectionConfig();
-                if (null != injectionConfig) {
-                    injectionConfig.initMap();
-                    objectMap.put("cfg", injectionConfig.getMap());
-                    List<FileOutConfig> focList = injectionConfig.getFileOutConfigList();
-                    if (CollectionUtils.isNotEmpty(focList)) {
-                        for (FileOutConfig foc : focList) {
-                            if (isCreate(foc.outputFile(tableInfo))) {
-                                writer(objectMap, foc.getTemplatePath(), foc.outputFile(tableInfo));
-                            }
+                if (CollectionUtils.isNotEmpty(focList)) {
+                    for (FileOutConfig foc : focList) {
+                        if (isCreate(foc.outputFile(tableInfo))) {
+                            writer(objectMap, foc.getTemplatePath(), foc.outputFile(tableInfo));
                         }
                     }
                 }
                 // Mp.java
                 String entityName = tableInfo.getEntityName();
                 String tableName = tableInfo.getName();
-                String[] excludeKeywords = configBuilder.getStrategyConfig().getExcludeKeywords();
-                String[] includeKeywords = configBuilder.getStrategyConfig().getIncludeKeywords();
-                final boolean isIncludeKeywords = ArrayUtils.isEmpty(includeKeywords) ||
-                        org.apache.commons.lang3.StringUtils.containsAny(tableName, includeKeywords);
-                final boolean isExcludeKeywords = ArrayUtils.isEmpty(excludeKeywords) ||
-                        !org.apache.commons.lang3.StringUtils.containsAny(tableName, excludeKeywords);
+                final boolean isIncludeKeywords = includeKeywords == null || StringUtils.matches(includeKeywords, tableName);
+                final boolean isExcludeKeywords = excludeKeywords == null || StringUtils.matches(includeKeywords, tableName);
                 if (null != entityName && null != pathInfo.get(ConstVal.ENTITY_PATH)) {
                     String entityFile = String.format((pathInfo.get(ConstVal.ENTITY_PATH) + File.separator + "%s" + suffixJavaOrKt()), entityName);
                     if (isCreate(entityFile)) {
