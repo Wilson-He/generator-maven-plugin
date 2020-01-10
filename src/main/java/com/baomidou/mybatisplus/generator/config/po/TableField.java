@@ -15,6 +15,7 @@
  */
 package com.baomidou.mybatisplus.generator.config.po;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
@@ -96,7 +97,7 @@ public class TableField {
         if (null == fieldEnums) {
             initCommentConstantList();
         }
-        return !fieldEnums.isEmpty();
+        return CollectionUtils.isNotEmpty(fieldEnums);
     }
 
     private void initCommentConstantList() {
