@@ -123,6 +123,10 @@ public class TableField {
         return this;
     }
 
+    public String getPropertyCamelName() {
+        return StringUtils.camelToUnderline(propertyName);
+    }
+
     protected TableField setConvert(StrategyConfig strategyConfig) {
         if (strategyConfig.isEntityTableFieldAnnotationEnable()) {
             this.convert = true;

@@ -10,14 +10,38 @@ import java.util.Map;
  * @author ${author}
  * @since ${date}
  */
-public interface ${entity}Constant {
+public final class ${entity}Constant {
 
 <#list table.fields as field>
     <#if field.constantField>
+    <#if field.fieldEnums?size lt 6>
+    private static final Map<${field.columnType.type}, String> ${field.propertyCamelName?upperCase}_MAP = ImmutableMap.of(
+    <#list field.fieldEnums as fieldEnum>
+        <#if fieldEnum_has_next>
+            ${field.propertyName?capFirst}.${fieldEnum.key}, "${fieldEnum.comment}",
+    <#else >
+            ${field.propertyName?capFirst}.${fieldEnum.key}, "${fieldEnum.comment}");
+    </#if>
+</#list>
+    <#else>
+    private static final Map<Object, Object> ${field.propertyCamelName?upperCase}_MAP = ImmutableMap.builder()
+    <#list field.fieldEnums as fieldEnum>
+        <#if fieldEnum_has_next>
+            .put(${field.propertyName?capFirst}.${fieldEnum.key}, "${fieldEnum.comment}")
+        </#if>
+    </#list>
+            .build();
+    </#if>
+    </#if>
+</#list>
+
+<#list table.fields as field>
+    <#if field.constantField>
+
     /**
      * ${field.excludeKeyComment}
      */
-    interface ${field.propertyName?capFirst} {
+    public interface ${field.propertyName?capFirst} {
     <#list field.fieldEnums as fieldEnum>
         /**
          * ${fieldEnum.comment}
@@ -25,24 +49,14 @@ public interface ${entity}Constant {
         ${field.columnType.type} ${fieldEnum.key} = ${fieldEnum.value};
     </#list>
         String COMMENT = "${field.excludeKeyComment}";
-    <#if field.fieldEnums?size lt 6>
-        Map<${field.columnType.type}, String> MAP = ImmutableMap.of(
-        <#list field.fieldEnums as fieldEnum>
-            <#if fieldEnum_has_next>
-                ${fieldEnum.key}, "${fieldEnum.comment}",
-            <#else >
-                ${fieldEnum.key}, "${fieldEnum.comment}");
-            </#if>
-        </#list>
-    <#else>
-        Map<Object, Object> MAP = ImmutableMap.builder()
-        <#list field.fieldEnums as fieldEnum>
-            <#if fieldEnum_has_next>
-                .put(${fieldEnum.key}, "${fieldEnum.comment}")
-            </#if>
-        </#list>
-                .build();
+    }
     </#if>
+</#list>
+
+<#list table.fields as field>
+    <#if field.constantField>
+    public static String get${field.propertyName?capFirst}Comment(${field.columnType.type} ${field.propertyName}) {
+        return ${field.propertyCamelName?upperCase}_MAP.get(${field.propertyName});
     }
 
     </#if>

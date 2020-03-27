@@ -127,7 +127,6 @@ public class ${entity} implements Serializable {
 <#if entityColumnConstant>
     <#list table.fields as field>
         public static final String ${field.name?upper_case} = "${field.name}";
-
     </#list>
 </#if>
 <#if activeRecord>
@@ -144,7 +143,7 @@ public class ${entity} implements Serializable {
 <#if !entityLombokModel>
     @Override
     public String toString() {
-    return "${entity}{" +
+        return "${entity}{" +
     <#list table.fields as field>
         <#if field_index==0>
             "${field.propertyName}=" + ${field.propertyName} +
@@ -157,8 +156,8 @@ public class ${entity} implements Serializable {
 </#if>
 <#list table.fields as field>
     <#if field.constantField>
-    public Object get${field.propertyName?cap_first}Dict() {
-        return ${entity}Constant.${field.propertyName?cap_first}.MAP.get(this.${field.propertyName});
+    public String get${field.propertyName?cap_first}Dict() {
+        return ${entity}Constant.get${field.propertyName?cap_first}Comment(this.${field.propertyName});
     }
 
     /**
