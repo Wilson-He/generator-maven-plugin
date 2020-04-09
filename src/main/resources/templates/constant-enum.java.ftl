@@ -31,8 +31,8 @@ public interface ${entity}Constant {
         ${fieldEnum.key}(${fieldEnum.value}, "${fieldEnum.comment}");
         </#if>
     </#list>
-        private ${field.columnType.type} value;
-        private String comment;
+        private final ${field.columnType.type} value;
+        private final String comment;
         private static final Map<${field.columnType.type}, String> MAP = Collections.unmodifiableMap(Arrays.stream(${field.propertyName?capFirst}.values())
                 .collect(Collectors.toMap(${field.propertyName?capFirst}::getValue, ${field.propertyName?capFirst}::getComment)));
 
