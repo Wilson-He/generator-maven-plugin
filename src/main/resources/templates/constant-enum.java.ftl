@@ -25,9 +25,6 @@ public interface ${entity}Constant {
     @Getter
     enum ${field.propertyName?capFirst} {
     <#list field.fieldEnums as fieldEnum>
-        /**
-         * ${fieldEnum.comment}
-         */
         <#if fieldEnum_has_next>
         ${fieldEnum.key}(${fieldEnum.value}, "${fieldEnum.comment}"),
         <#else >
@@ -36,8 +33,10 @@ public interface ${entity}Constant {
     </#list>
         private ${field.columnType.type} value;
         private String comment;
+        private static final Map<${field.columnType.type}, String> MAP = Collections.unmodifiableMap(Arrays.stream(${field.propertyName?capFirst}.values())
+                .collect(Collectors.toMap(${field.propertyName?capFirst}::getValue, ${field.propertyName?capFirst}::getComment)));
 
-        public static String getComment(${field.columnType.type} value) {
+        public static String comment(${field.columnType.type} value) {
             return MAP.get(value);
         }
 

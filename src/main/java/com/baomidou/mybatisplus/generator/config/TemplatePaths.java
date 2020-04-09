@@ -17,10 +17,7 @@ package com.baomidou.mybatisplus.generator.config;
 
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import io.github.generator.TemplateConfig;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
 
@@ -47,6 +44,14 @@ public class TemplatePaths {
     private String xml = ConstVal.TEMPLATE_XML;
     private String controller = ConstVal.TEMPLATE_CONTROLLER;
     private AutoGenerator autoGenerator;
+
+    public TemplatePaths useEnumTemplate(boolean useEnumTemplate) {
+        if (useEnumTemplate) {
+            entity = ConstVal.TEMPLATE_ENTITY_JAVA_ENUM;
+            constant = ConstVal.TEMPLATE_ENTITY_CONSTANT_ENUM;
+        }
+        return this;
+    }
 
     public String getEntity(boolean kotlin) {
         return kotlin ? entityKt : entity;

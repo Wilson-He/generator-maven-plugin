@@ -171,6 +171,11 @@ public class GenerateProcessorMojo extends AbstractMojo {
     @Parameter(defaultValue = "false")
     private Boolean useSwagger;
     /**
+     * 是否使用enum常量模板
+     */
+    @Parameter(defaultValue = "false")
+    private Boolean useEnumTemplate;
+    /**
      * 数组类型,表名前缀,如tb_user不生成tb_前缀则设为tb_,非必须,多个则用逗号分","隔
      */
     @Parameter
@@ -213,6 +218,7 @@ public class GenerateProcessorMojo extends AbstractMojo {
                     // 模板路径配置
                     .getTemplatePaths()
                     .parseTemplatePath(templates)
+                    .useEnumTemplate(useEnumTemplate)
                     .backGenerator()
                     .execute(Optional.ofNullable(templates)
                             .map(e -> e.setResourcesPath(new File(basedir, RESOURCE_PATH)))

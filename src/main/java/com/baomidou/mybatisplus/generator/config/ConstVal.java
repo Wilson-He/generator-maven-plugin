@@ -54,6 +54,7 @@ public interface ConstVal {
     String XML_SUFFIX = ".xml";
 
     String TEMPLATE_ENTITY_JAVA = "/templates/entity.java";
+    String TEMPLATE_ENTITY_JAVA_ENUM = "/templates/entity-enum.java";
     String TEMPLATE_ENTITY_KT = "/templates/entity.kt";
     String TEMPLATE_ENTITY_CONSTANT = "/templates/constant.java";
     String TEMPLATE_ENTITY_CONSTANT_ENUM = "/templates/constant-enum.java";
