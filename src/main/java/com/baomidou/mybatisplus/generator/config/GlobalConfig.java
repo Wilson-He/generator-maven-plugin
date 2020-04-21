@@ -115,17 +115,17 @@ public class GlobalConfig {
         if (templates == null) {
             return this;
         }
-        return compute(templates.getEntityPattern() != null, GlobalConfig::setEntityName, templates.getEntityPattern())
-                .compute(templates.getConstantPattern() != null, GlobalConfig::setConstantName, templates.getConstantPattern())
-                .compute(templates.getXmlPattern() != null, GlobalConfig::setXmlName, templates.getXmlPattern())
-                .compute(templates.getDaoPattern() != null, GlobalConfig::setMapperName, templates.getDaoPattern())
-                .compute(templates.getServicePattern() != null, GlobalConfig::setServiceName, templates.getServicePattern())
-                .compute(templates.getServiceImplPattern() != null, GlobalConfig::setServiceImplName, templates.getServiceImplPattern())
-                .compute(templates.getControllerPattern() != null, GlobalConfig::setControllerName, templates.getControllerPattern());
+        return compute(GlobalConfig::setEntityName, templates.getEntityPattern())
+                .compute(GlobalConfig::setConstantName, templates.getConstantPattern())
+                .compute(GlobalConfig::setXmlName, templates.getXmlPattern())
+                .compute(GlobalConfig::setMapperName, templates.getDaoPattern())
+                .compute(GlobalConfig::setServiceName, templates.getServicePattern())
+                .compute(GlobalConfig::setServiceImplName, templates.getServiceImplPattern())
+                .compute(GlobalConfig::setControllerName, templates.getControllerPattern());
     }
 
-    private GlobalConfig compute(boolean isExecute, BiFunction<GlobalConfig, String, GlobalConfig> setFunc, String val) {
-        return isExecute ? setFunc.apply(this, val) : this;
+    private GlobalConfig compute(BiFunction<GlobalConfig, String, GlobalConfig> setFunc, String val) {
+        return val != null ? setFunc.apply(this, val) : this;
     }
 
 }

@@ -43,8 +43,17 @@ public class GenerateProcessorMojo extends AbstractMojo {
      * <li>bitToInteger - 是否将数据库bit类型逆向生成为integer类型,默认true</li>
      * <li>commentPattern - 注释样式,不配置则不生成constant,如: key:value:comment  key:value-comment</li>
      * <li>excludeConstantFields - 不生成指定字段常量类,如: is_delete,state</li>
+     * <br>
+     * Demo:<pre>
+     * &lt;dataSource>
+     *     &lt;url>jdbc:mysql://localhost:3306/wilson&lt;/url>
+     *     &lt;username>root&lt;/username>
+     *     &lt;password>tiger&lt;/password>
+     * &lt;/dataSource>
+     * </pre>
+     *
      */
-    @Parameter
+    @Parameter(required = true)
     private DataSourceProperties dataSource;
 
     /**
