@@ -111,11 +111,6 @@ public class GenerateProcessorMojo extends AbstractMojo {
     @Parameter
     private String idType;
     /**
-     * id类型(如Long),设置后生成的service将自动生成对应的findById方法,如: Long
-     */
-    @Parameter
-    private String crudIdType;
-    /**
      * 在指定字段上添加jackson @JsonIgnore注解,多个字段用逗号分隔,如: password,salt,isDelete
      */
     @Parameter
@@ -209,7 +204,6 @@ public class GenerateProcessorMojo extends AbstractMojo {
                     .setBaseColumnList(true)
                     .setSwagger2(useSwagger)
                     .setIdType(Optional.ofNullable(idType).map(IdType::valueOf).orElse(null))
-                    .setCrudIdType(crudIdType)
                     .setAuthor(Optional.ofNullable(author).orElse(""))
                     .setOutputDir(outputDirectory.getAbsolutePath())
                     .backGenerator()

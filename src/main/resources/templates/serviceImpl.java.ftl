@@ -24,9 +24,8 @@ public class ${table.serviceImplName} implements ${table.serviceName}{
     @Resource
     private ${table.mapperName} ${table.mapperName?uncap_first};
 
-    <#if crudIdType??>
     @Override
-    public ${crudIdType} insert(${entity} ${entity?uncap_first}){
+    public ${table.idType} insert(${entity} ${entity?uncap_first}){
         ${table.mapperName?uncap_first}.insert(${entity?uncap_first});
         return ${entity?uncap_first}.getId();
     }
@@ -37,14 +36,13 @@ public class ${table.serviceImplName} implements ${table.serviceName}{
     }
 
     @Override
-    public ${entity} findById(${crudIdType} id){
+    public ${entity} findById(${table.idType} id){
         return ${table.mapperName?uncap_first}.selectById(id);
     }
 
     @Override
-    public boolean deleteById(${crudIdType} id){
+    public boolean deleteById(${table.idType} id){
         return ${table.mapperName?uncap_first}.deleteById(id) > 0;
     }
     </#if>
 }
-</#if>

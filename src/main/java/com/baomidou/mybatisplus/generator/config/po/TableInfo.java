@@ -64,6 +64,14 @@ public class TableInfo {
         return this;
     }
 
+    public String getIdType() {
+        return fields != null ? fields.stream()
+                .filter(field -> field.getName().equals("id"))
+                .map(TableField::getPropertyType)
+                .findFirst()
+                .orElse("String") : "String";
+    }
+
     public boolean isHasJsonIgnore() {
         return Optional.ofNullable(strategyConfig.getJsonIgnoreFields())
                 .map(Collection::stream)
