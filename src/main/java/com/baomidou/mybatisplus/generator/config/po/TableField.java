@@ -79,6 +79,11 @@ public class TableField {
     private static final String COMMENT_REGEX_PURE = "((\\W+|\\w+)-(\\W+|\\w+,?)+)";
     private static final String COMMENT_REGEX = COMMENT_REGEX_PURE + "|" + COMMENT_REGEX_SUFFIX;
 
+    /**
+     * 判断当前自动是否为常量字段
+     *
+     * @return
+     */
     public boolean isConstantField() {
         if (ConstantCommentConfig.getInstance() == null) {
             return false;

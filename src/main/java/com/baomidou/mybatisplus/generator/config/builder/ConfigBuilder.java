@@ -317,7 +317,9 @@ public class ConfigBuilder {
             entityName = null != nameConvert ? nameConvert.entityNameConvert(tableInfo)
                     : NamingStrategy.capitalFirst(processName(tableInfo.getName(), strategy, tablePrefix));
             if (StringUtils.isNotEmpty(globalConfig.getEntityName())) {
-                tableInfo.setConvert(true).setConvert(true).setEntityName(String.format(globalConfig.getEntityName(), entityName));
+                tableInfo.setConvert(true)
+                        .setConvert(true)
+                        .setEntityName(String.format(globalConfig.getEntityName(), entityName));
             } else {
                 tableInfo.setEntityName(strategyConfig, entityName);
             }
@@ -354,18 +356,19 @@ public class ConfigBuilder {
         }
         if (null != globalConfig.getIdType()) {
             // 指定需要 IdType 场景
-            tableInfo.getImportPackages().add(com.baomidou.mybatisplus.annotation.IdType.class.getCanonicalName());
-            tableInfo.getImportPackages().add(com.baomidou.mybatisplus.annotation.TableId.class.getCanonicalName());
+            Collections.addAll(tableInfo.getImportPackages(),
+                    com.baomidou.mybatisplus.annotation.IdType.class.getCanonicalName(),
+                    com.baomidou.mybatisplus.annotation.TableId.class.getCanonicalName());
         }
-        if (StringUtils.isNotEmpty(strategyConfig.getVersionFieldName())) {
-            tableInfo.getFields().forEach(f -> {
-                if (strategyConfig.getVersionFieldName().equals(f.getName())) {
-                    tableInfo.getImportPackages().add(com.baomidou.mybatisplus.annotation.Version.class.getCanonicalName());
-                }
-            });
+        String versionFieldName = strategyConfig.getVersionFieldName();
+        boolean hasVersionField = StringUtils.isNotEmpty(versionFieldName) &&
+                tableInfo.getFields()
+                        .stream()
+                        .anyMatch(field -> versionFieldName.equals(field.getName()));
+        if(hasVersionField){
+            tableInfo.getImportPackages().add(com.baomidou.mybatisplus.annotation.Version.class.getCanonicalName());
         }
     }
-
 
     /**
      * 获取所有的数据库表信息
@@ -501,7 +504,7 @@ public class ConfigBuilder {
                      ResultSet pkResults = pkQueryStmt.executeQuery()) {
                     while (pkResults.next()) {
                         String primaryKey = pkResults.getString(dbQuery.fieldKey());
-                        if (Boolean.valueOf(primaryKey)) {
+                        if (Boolean.parseBoolean(primaryKey)) {
                             h2PkColumns.add(pkResults.getString(dbQuery.fieldName()));
                         }
                     }
