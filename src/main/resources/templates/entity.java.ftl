@@ -98,9 +98,9 @@ public class ${entity} implements Serializable {
     @JsonIgnore
     </#if>
     private ${field.propertyType} ${field.propertyName};
+
 </#list>
-<#------------  END 字段循环遍历  ---------->
-<#if !entityLombokModel>
+<#if !entityLombokModel><#------------  END 字段循环遍历  ---------->
     <#list table.fields as field>
         <#if field.propertyType == "boolean">
             <#assign getprefix="is"/>
@@ -121,9 +121,9 @@ public class ${entity} implements Serializable {
             return this;
         </#if>
         }
+
     </#list>
 </#if>
-
 <#if entityColumnConstant>
     <#list table.fields as field>
         public static final String ${field.name?upper_case} = "${field.name}";

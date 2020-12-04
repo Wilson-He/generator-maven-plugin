@@ -2,6 +2,7 @@ package io.github.generator;
 
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import lombok.Data;
+import org.apache.maven.plugins.annotations.Parameter;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,9 +16,13 @@ public class DataSourceProperties {
     /**
      * 数据库类型[MYSQL,ORACLE,PROGRE_SQL]
      */
+    @Parameter
     private DriverType driverType;
+    @Parameter(required = true)
     private String url;
+    @Parameter(required = true)
     private String username;
+    @Parameter(required = true)
     private String password;
     /**
      * 是否将数据库bit类型逆向生成为integer类型

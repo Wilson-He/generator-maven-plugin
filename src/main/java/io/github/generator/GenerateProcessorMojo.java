@@ -2,6 +2,7 @@ package io.github.generator;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.DefaultGeneratorConfig;
+import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -51,7 +52,6 @@ public class GenerateProcessorMojo extends AbstractMojo {
      *     &lt;password>tiger&lt;/password>
      * &lt;/dataSource>
      * </pre>
-     *
      */
     @Parameter(required = true)
     private DataSourceProperties dataSource;
@@ -89,6 +89,23 @@ public class GenerateProcessorMojo extends AbstractMojo {
      */
     @Parameter
     private TemplateConfig templates;
+    /**
+     * 基于basePackage包的生成类包路径，以下为不配置时的默认值：<br>
+     * <pre>
+     * &lt;packageConfig>
+     *    &lt;entity>domain.model&lt;/entity>
+     *    &lt;constant>domain.constant&lt;/constant>
+     *    &lt;mapper>mapper&lt;/mapper>
+     *    &lt;xml>mappers&lt;/mapper>
+     *    &lt;service>service&lt;/service>
+     *    &lt;serviceImpl>service.impl&lt;/serviceImpl>
+     *    &lt;controller>controller&lt;/controller>
+     *    &lt;controller>domain.constant&lt;/controller>
+     * &lt;/packageConfig>
+     * <pre>
+     */
+    @Parameter
+    private PackageConfig packageConfig;
     /**
      * 逻辑删除属性名称
      */
@@ -223,6 +240,7 @@ public class GenerateProcessorMojo extends AbstractMojo {
                     .parseTemplatePath(templates)
                     .useEnumTemplate(useEnumTemplate)
                     .backGenerator()
+                    .setPackageInfo(Optional.ofNullable(packageConfig).orElse(new PackageConfig()).setParent(basePackage))
                     .execute(Optional.ofNullable(templates)
                             .map(e -> e.setResourcesPath(new File(basedir, RESOURCE_PATH)))
                             .orElse(new TemplateConfig()));

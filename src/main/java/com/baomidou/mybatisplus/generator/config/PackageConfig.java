@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.apache.maven.plugins.annotations.Parameter;
 
 import java.util.Map;
 
@@ -46,30 +47,37 @@ public class PackageConfig {
     /**
      * Entity包名
      */
-    private String entity = "domain.entity";
+    @Parameter
+    private String entity = "domain.model";
     /**
      * EntityConstant包名
      */
+    @Parameter
     private String constant = "domain.constant";
+    /**
+     * Mapper包名
+     */
+    @Parameter
+    private String mapper = "mapper";
     /**
      * Service包名
      */
+    @Parameter
     private String service = "service";
     /**
      * Service Impl包名
      */
+    @Parameter
     private String serviceImpl = "service.impl";
-    /**
-     * Mapper包名
-     */
-    private String mapper = "mapper";
     /**
      * Mapper XML包名
      */
-    private String xml = "mapper.xml";
+    @Parameter
+    private String xml = "mappers";
     /**
      * Controller包名
      */
+    @Parameter
     private String controller = "controller";
     /**
      * 路径配置信息

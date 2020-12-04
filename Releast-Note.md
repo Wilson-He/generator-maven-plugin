@@ -2,6 +2,7 @@
   #### (注：中位版本变更意味原配置属性进行变更或生成bug修复)
   - ### 0.2.7
     - 删除crudIdType设置，修改为默认读取entity id字段类型
+    - 添加生成所在包配置项 `packageConfig`
   - ### 0.2.6
     - 修改添加enum常量模板,添加useEnumTemplate配置项
   - ### 0.2.5
